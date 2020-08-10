@@ -1,0 +1,17 @@
+.Card {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin-top: 10px;
+    height: 400px;
+    justify-content: center;
+    background: beige;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    align-items: center;
+}
+.Card h4{
+    position: relative;
+    right: 50px;
+}
