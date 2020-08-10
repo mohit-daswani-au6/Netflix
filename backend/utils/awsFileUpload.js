@@ -1,13 +1,6 @@
 const AWS = require("aws-sdk");
 const fs=require("fs")
-const s3 = new AWS.S3({
-  accessKeyId: "AKIAJRJ4DPHV6547VGQA",
-  secretAccessKey: "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",
-  signatureVersion: "v4",
-  apiVersion: "2006-03-01",
-  region: "ap-south-1",
-  // useAccelerateEndpoint: true,
-});
+
 const AWSSignedUrl =async (file) => {
   try {
     const { mimetype, purpose, originalname } = file;
