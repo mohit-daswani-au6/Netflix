@@ -2,14 +2,7 @@ const admins = require("../models/admin");
 const movie = require("../models/movies");
 const FormData = require("form-data");
 // const formidable = require("formidable")
-// const s3fs=require("s3fs")
-// const s3fsimpl = new s3fs("mynetflixclone1",{
-//   accessKeyId: "AKIAJRJ4DPHV6547VGQA",
-//   secretAccessKey: "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",
-//   signatureVersion: "v4",
-//   apiVersion: "2006-03-01",
-//   region: "ap-south-1",
-// })
+
 // s3fsimpl.create()
 // const {getVideoDurationInSeconds}= require("get-video-duration")
 const fs = require("fs");
