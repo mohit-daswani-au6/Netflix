@@ -4,11 +4,9 @@ const fs = require("fs");
 const AWSSignedUrl = async (file) => {
   try {
     const { mimetype, originalname, buffer, fieldname } = file;
-    const s3FileURL = "https://mynetflixclone1.s3.ap-south-1.amazonaws.com/";
-
     let s3bucket = new AWS.S3({
-      accessKeyId: "AKIAJRJ4DPHV6547VGQA",
-      secretAccessKey: "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",
+      accessKeyId: process.env.AWSAccesskey,
+      secretAccessKey: process.env.AWSPassword,
       signatureVersion: "v4",
       apiVersion: "2006-03-01",
       region: "ap-south-1",
@@ -25,7 +23,7 @@ const AWSSignedUrl = async (file) => {
       if (err) {
         console.log(err);
       } else {
-        const filelink = `d117rg3wqcjkx9.cloudfront.net/${data.Key}`;
+        const filelink = `${proccess.env.AWSDomain}/${data.Key}`;
 url.push(filelink)
       }
     });
