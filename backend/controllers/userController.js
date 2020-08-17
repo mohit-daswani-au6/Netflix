@@ -1,6 +1,7 @@
 const users = require("../models/user");
 const email1 = require("../utils/nodeMailer");
 const { verify } = require("jsonwebtoken");
+const {hash}=require("bcryptjs")
 const { validationResult } = require("express-validator");
 module.exports = {
   get: {
@@ -8,12 +9,12 @@ module.exports = {
     async verify_user_email(req, res) {
       try {
         let temp = req.params.token;
-        console.log(temp)
+        console.log(temp);
         let user1 = await users.find_user_by_token(temp);
-        console.log(user1)
+        console.log(user1);
         res.send("email verified");
       } catch (err) {
-        console.log(err,"sdfsd");
+        console.log(err, "sdfsd");
         res.status(500).send("server error");
       }
     },
@@ -37,7 +38,7 @@ module.exports = {
         }
       } catch (err) {
         if (err.message == "Invalid Credentials")
-          return res.send({statusCode:400,error:"Invalid Credentials"});
+          return res.send({ statusCode: 400, error: "Invalid Credentials" });
         return res.send("ServerError");
       }
     },
@@ -68,10 +69,12 @@ module.exports = {
         } catch (err) {
           if (err.code === 11000) {
             if (err.keyValue.hasOwnProperty("email")) {
-              return res.json({error:{email:`Email already occupied`}});
+              return res.json({ error: { email: `Email already occupied` } });
             }
             if (err.keyValue.hasOwnProperty("phoneNo")) {
-              return res.json({error:{phoneNo:`Phone Number already registered`}});
+              return res.json({
+                error: { phoneNo: `Phone Number already registered` },
+              });
             }
           }
           if (err.name === "ValidationError")
@@ -85,12 +88,15 @@ module.exports = {
     async forgot_password(req, res) {
       try {
         let { email } = req.body;
-        console.log(req.body)
+        console.log(req.body);
         const user = await users.find_by_email(email);
         console.log(user);
         if (user.length != 0) {
           if (user[0].verified === false) {
-            return res.json({statusCode:"403", error: "please verify your email first" });
+            return res.json({
+              statusCode: "403",
+              error: "please verify your email first",
+            });
           } else {
             const resetToken = await users.generate_reset_token(user);
             let subject = `Password Reset`;
@@ -114,7 +120,8 @@ module.exports = {
               message: `We have send a reset password email to ${user[0].email}. Please click the reset password link to set a new password.`,
             });
           }
-        } else return res.json({statusCode:403,error:"email ID not found"});
+        } else
+          return res.json({ statusCode: 403, error: "email ID not found" });
       } catch (err) {
         console.log(err.message);
         res.status(500).send("server error");
@@ -131,37 +138,65 @@ module.exports = {
       }
       const { resetToken } = req.params;
       const { newpassword, cpassword } = req.body;
-      if (newpassword !== cpassword) return res.send({statusCode:400,error:"Password doesn't match"});
+      if (newpassword !== cpassword)
+        return res.send({ statusCode: 400, error: "Password doesn't match" });
       try {
         const decoded = await verify(resetToken, process.env.secretkey);
         if (decoded) {
           const user = await users.find({ resetToken: resetToken });
           user[0].password = newpassword;
           user[0].save();
-          res.send({statusCode:201,message:"password successfully changed"});
+          res.send({
+            statusCode: 201,
+            message: "password successfully changed",
+          });
         }
       } catch (err) {
         console.log(err.message);
-        if(err.message==="jwt expired") return res.send({statusCode:400,error:"session expired"})
+        if (err.message === "jwt expired")
+          return res.send({ statusCode: 400, error: "session expired" });
         res.send("serverError");
       }
     },
-    // async change_password(req, res) {
-    //   const { oldPassword, newpassword, cpassword } = req.body;
-    //   const user = req.user;
-    //   if (!oldPassword || !newpassword || !cpassword)
-    //     return res.status(400).send("Kindly fill all the fields");
-      
-    //   const user
-    // },
+    async ChangePassword(req, res) {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+      }
+      try {
+        const user = req.user;
+        const { oldpassword, newpassword, confirmpassword } = req.body;
+        const password = await users.findByPassword(user, oldpassword);
 
+        if (password === "Invalid Credentials") {
+          res.status(401).json({ status: "failed", message: "Bad Request" });
+        } else {
+          if (newpassword === confirmpassword) {
+            const hashedpassword = await hash(newpassword, 10);
+            const resetPassword = await users.updateOne(
+              { token: user.token },
+              { password: hashedpassword },
+              { new: true }
+            );
+            res.status(200).json({ status: "success", message: resetPassword });
+          } else {
+            res.status(401).json({ status: "failed", message: "Bad Request" });
+          }
+        }
+      } catch (err) {
+        console.log(err.message);
+        if(err.message==="Invalid old password") return res.json({statusCode:401,error:err.message})
+        
+        res.status(500).send({ status: "failed", message: "Server Error" });
+      }
+    },
   },
   //-------------------------------------------------------------------------------start of delete request
   delete1: {
     //------------------------------------------------------------------------user logout logic
     async logout_user(req, res) {
       try {
-        const token = req.header("Authorization")
+        const token = req.header("Authorization");
         const user = await users.nullifyToken(token);
         res.json(user);
       } catch (err) {

@@ -23,6 +23,9 @@ router.post("/user/forgot_password", post.forgot_password)
 router.put("/user/forgot_password/:resetToken", [
     check('newpassword').matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/).withMessage('Must have symbol lowercase uppercase and number').isLength({ min: 8 }).withMessage('Must be at least 8 chars long')
 ], put.forgot_password)
+router.put("/user/changePassword",authentication, [
+    check('newpassword').matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/).withMessage('Must have symbol lowercase uppercase and number').isLength({ min: 8 }).withMessage('Must be at least 8 chars long')
+], put.ChangePassword)
 //-------------------------------------------------------Delete Request Route
 router.delete("/user/logout", delete1.logout_user)
 

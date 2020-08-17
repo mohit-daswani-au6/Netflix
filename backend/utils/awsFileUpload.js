@@ -1,50 +1,37 @@
 const AWS = require("aws-sdk");
-const fs=require("fs")
-const s3 = new AWS.S3({
-  accessKeyId: "AKIAJRJ4DPHV6547VGQA",
-  secretAccessKey: "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",
-  signatureVersion: "v4",
-  apiVersion: "2006-03-01",
-  region: "ap-south-1",
-  // useAccelerateEndpoint: true,
-});
-const AWSSignedUrl =async (file) => {
+const fs = require("fs");
+
+const AWSSignedUrl = async (file) => {
   try {
-    const { mimetype, purpose, originalname } = file;
-    const fileurls = [];
-    const filename="uploads/file4Sbv3.png"
-    console.log("ADasdas",file)
-    // const filec =await fs.readFileSync(filename)
-    // console.log("AfdssfsdfDasdas",filec)
-    const signedUrlExpireSeconds = 60 * 60 * 10;
-    const params = {
+    const { mimetype, originalname, buffer, fieldname } = file;
+    const s3FileURL = "https://mynetflixclone1.s3.ap-south-1.amazonaws.com/";
+
+    let s3bucket = new AWS.S3({
+      accessKeyId: "AKIAJRJ4DPHV6547VGQA",
+      secretAccessKey: "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",
+      signatureVersion: "v4",
+      apiVersion: "2006-03-01",
+      region: "ap-south-1",
+    });
+    var params = {
       Bucket: "mynetflixclone",
-      Key: `movie/${originalname}`,
-      Expires: signedUrlExpireSeconds,
-      ACL: "public-read",
+      Key: `${fieldname}/${originalname}`,
+      Body: buffer,
       ContentType: mimetype,
-      // Body :JSON.stringify(filec, null, 2)
+      ACL: "public-read",
     };
-  //  await  s3.upload(params, function(err, data) {
-  //     console.log("PRINT FILE:", file);
-  //     if (err) {
-  //         console.log('ERROR MSG: ', err);
-  //     } else {
-  //         console.log('Successfully uploaded data',data);
-  //     }
-  // });
-    await s3.getSignedUrl("putObject", params, function (err, url) {
+    const url=[]
+    await s3bucket.upload(params, function (err, data) {
       if (err) {
-        console.log("Error getting presigned url from AWS S3");
+        console.log(err);
       } else {
-        fileurls[0] = url;
-        console.log("Presigned URL: ", fileurls[0]);
+        const filelink = `d117rg3wqcjkx9.cloudfront.net/${data.Key}`;
+url.push(filelink)
       }
     });
-    
-    console.log("dasda",fileurls[0])
-    return fileurls[0];
-  } catch (err) {
+    console.log("Dsaadas",url)
+    return url[0];
+  } catch (err){
     console.log(err);
   }
 };

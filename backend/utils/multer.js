@@ -23,14 +23,13 @@ let storage = multer.diskStorage({
     storage: storage,
     //-------------------------------logic to upload only images
     fileFilter:(req, file, cb)=>{
-      if (file.mimetype === "image/jpg" || file.mimetype === "image/jpeg" || file.mimetype === "image/png" || file.mimetype === "image/webp"|| file.mimetype === "video/mp4") {
+      if (file.mimetype === "image/jpg" || file.mimetype === "image/jpeg" || file.mimetype === "image/png" || file.mimetype === "image/webp") {
           cb(null, true)
       } else {
           var newError = new Error("file type is incorrect")
           newError.name == "multerError"
           cb(newError, false)
       }
-      console.log(file)
   },
     limits:{
         fileSize: 1024 * 1024 * 10

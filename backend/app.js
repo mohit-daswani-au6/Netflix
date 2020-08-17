@@ -8,6 +8,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 const userRoute = require('./Routes/userRoute')
 const adminRoute = require("./Routes/adminRoute")
+const movieRoute = require("./Routes/moviesRoute")
 // const rateLimit = require("express-rate-limit");
 // const apiLimiter = rateLimit({
 //   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -24,6 +25,7 @@ app.use(
 
 app.use(userRoute)
 app.use(adminRoute)
+app.use(movieRoute)
 
 
 
