@@ -40,7 +40,7 @@ class RegisterPage extends Component {
     const response = await this.props.registerUser(obj);
     if (response.statusCode === 201) {
       this.setState({ emailVerificaionPage: true });
-      localStorage.setItem("user",response.newUser)
+      localStorage.setItem("user", response.newUser);
     } else if (response.error.hasOwnProperty("email")) {
       console.log(response.error.email);
       this.setState({ error: { email: response.error.email } });
@@ -103,6 +103,13 @@ class RegisterPage extends Component {
                 </Form>
               )}
             </Formik>
+            <br />
+            <p>
+              Already a user?
+              <button>
+                <Link to="/user/login">Sign in</Link>
+              </button>
+            </p>
           </div>
         ) : (
           <div>

@@ -16,7 +16,7 @@ const Row = ({ title, moviesURL, isLargeRow,genre }) => {
     fetchMovies();
   }, []);
   return (
-    <div className="row">
+    <div className="row1">
       {/* <h2 style={{ marginLeft: "20px" }}>{title}</h2>
       <br />
       <div className="row_posters">

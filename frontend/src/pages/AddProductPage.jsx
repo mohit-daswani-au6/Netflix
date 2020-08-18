@@ -11,6 +11,7 @@ class AddPrductPage extends Component {
     backgroundImage: "",
     country: "",
     isReleased: false,
+    isPaid:false,
     rating: "",
     releasedDate: "",
     movie: "",
@@ -53,6 +54,7 @@ class AddPrductPage extends Component {
     fd.append("movie", this.state.movie);
     fd.append("country", this.state.country);
     fd.append("isAdult", this.state.isAdult);
+    fd.append("isPaid", this.state.isPaid);
     fd.append("runTime", this.state.runTime);
     fd.append("rating", this.state.rating);
     fd.append("genre", JSON.stringify(genre));
@@ -185,6 +187,15 @@ class AddPrductPage extends Component {
           />
           <label htmlFor="isAdult">isAdult</label>
         </div>
+        <div>
+          <input
+            onChange={this.handleChange}
+            value={this.state.isPaid}
+            type="checkbox"
+            name="isPaid"
+          />
+          <label htmlFor="isPaid">isPaid</label>
+        </div>
         <h2>rating</h2>
         <input
           onChange={this.handleChange}
@@ -192,7 +203,7 @@ class AddPrductPage extends Component {
           type="number"
           // required
           name="rating"
-            required
+          required
         />
         <h2>runTime</h2>
         <input
@@ -276,5 +287,4 @@ class AddPrductPage extends Component {
   }
 }
 
-export default connect(null, { addMovie })(AddPrductPage
-);
+export default connect(null, { addMovie })(AddPrductPage);

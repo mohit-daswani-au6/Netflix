@@ -1,12 +1,15 @@
 const movieSchema = require("../models//movies");
+const SubscribeSchema = require("../models/subscriptionPlans");
 module.exports = {
   get: {
     async getAllMovies(req, res) {
       const allMovies = await movieSchema.find();
-      res.json({ statusCode: 200, movies: allMovies });
+
+      res.json({ statusCode: 201, movies: allMovies });
     },
     async singleMovie(req, res) {
       try {
+        const user = req.user;
         const { movieId } = req.params;
         const { watched } = req.body;
         const movie = await movieSchema.findOneAndUpdate(
@@ -16,9 +19,31 @@ module.exports = {
             new: true,
           }
         );
-        res.json({ statusCode: 201, movie: movie });
+        if (movie.isPaid === false)
+          return res.json({ statusCode: 201, movie: movie });
+        else {
+          const subscription = await SubscribeSchema.find({ userId: user.id });
+          if (subscription.length>0) {
+            if (
+              new Date(
+                subscription[subscription.length - 1].planExpiryDate
+              ).getTime() >= Date.now()
+            ) {
+              res.json({ statusCode: 201, movie: movie });
+            } else
+              return res.json({
+                status: "failed",
+                error: "please Resubscribe the premium plan",
+              });
+          } else
+            return res.json({
+              status: "failed",
+              error: "please subscribe the premium plan",
+            });
+        }
       } catch (err) {
         console.log(err);
+        res.send("server Error");
       }
     },
     async search_movie(req, res) {
@@ -51,7 +76,7 @@ module.exports = {
       try {
         const movies = await movieSchema.find({}).sort({ trending: -1 });
         console.log(movies);
-        res.json({statusCode:201,movies});
+        res.json({ statusCode: 201, movies });
       } catch (err) {
         console.log(err);
         res.send("serverError");
@@ -61,7 +86,7 @@ module.exports = {
       try {
         const movies = await movieSchema.find({}).sort({ rating: -1 });
         console.log(movies);
-        res.send(movies);
+        res.json({ statusCode: 201, movies });
       } catch (err) {
         console.log(err);
         res.send("serverError");
@@ -74,7 +99,7 @@ module.exports = {
           const movies = await movieSchema
             .find({ isPaid: true })
             .sort({ trending: -1 });
-          res.send({statusCode:201,movies});
+          res.send({ statusCode: 201, movies });
         } else
           return res.json({
             statusCode: 400,
@@ -85,13 +110,13 @@ module.exports = {
         res.send("serverError");
       }
     },
-    async getMovieByGenre(req,res){
-      const {genres}=req.params
-      const movies= await movieSchema.find({})
-     const filteredMovies=await movies.filter((movie)=>{
-     return movie.genre[genres]===true
-     })
-      res.json({statusCode:201,filteredMovies})
-    }
+    async getMovieByGenre(req, res) {
+      const { genres } = req.params;
+      const movies = await movieSchema.find({});
+      const filteredMovies = await movies.filter((movie) => {
+        return movie.genre[genres] === true;
+      });
+      res.json({ statusCode: 201, filteredMovies });
+    },
   },
 };

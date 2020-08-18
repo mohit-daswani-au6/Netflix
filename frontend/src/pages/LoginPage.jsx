@@ -22,19 +22,18 @@ class LoginPage extends Component {
   handleSubmit = async (data) => {
     const { email, password } = data;
     const obj = { email, password };
-    
+
     const resp = await this.props.loginUser(obj);
     console.log(resp);
     if (resp.statusCode === 400) {
       console.log(resp.error);
       this.setState({ error: resp.error });
     } else if (resp.statusCode === 201) {
-      // this.props.history
+      this.props.history.push("/");
     }
     setTimeout(() => {
       this.setState({ error: "" });
     }, 3000);
-    // this.props.history.push("/");
   };
 
   render() {
@@ -66,7 +65,14 @@ class LoginPage extends Component {
             </Form>
           )}
         </Formik>
-        <Link to ="/user/forgotPassword">forgot password?</Link>
+        <Link to="/user/forgotPassword">forgot password?</Link>
+        <br />
+        <p>
+        New User?
+          <button>
+            <Link to="/user/register">Sign Up</Link>
+          </button>
+        </p>
       </div>
     );
   }

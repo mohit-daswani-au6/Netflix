@@ -34,6 +34,7 @@ module.exports = {
           res.status(201).json({
             statusCode: 201,
             token: accesToken,
+            user
           });
         }
       } catch (err) {
@@ -165,29 +166,29 @@ module.exports = {
       }
       try {
         const user = req.user;
-        const { oldpassword, newpassword, confirmpassword } = req.body;
+        const { oldpassword, newpassword, cpassword } = req.body;
         const password = await users.findByPassword(user, oldpassword);
 
         if (password === "Invalid Credentials") {
-          res.status(401).json({ status: "failed", message: "Bad Request" });
+          res.json({ status: "failed", error: "Bad request" });
         } else {
-          if (newpassword === confirmpassword) {
+          if (newpassword === cpassword) {            
             const hashedpassword = await hash(newpassword, 10);
             const resetPassword = await users.updateOne(
               { token: user.token },
               { password: hashedpassword },
               { new: true }
             );
-            res.status(200).json({ status: "success", message: resetPassword });
+            res.status(200).json({ statusCode: 201, message: "password changed successfully" });
           } else {
-            res.status(401).json({ status: "failed", message: "Bad Request" });
+            res.json({ status: "failed", error: "Password doesn't match" });
           }
         }
       } catch (err) {
-        console.log(err.message);
-        if(err.message==="Invalid old password") return res.json({statusCode:401,error:err.message})
+        console.log(err);
+        if(err.message==="Invalid old password") return res.json({status:"failed",error:err.message})
         
-        res.status(500).send({ status: "failed", message: "Server Error" });
+        res.status(500).send({ status: "failed", error: "Server Error" });
       }
     },
   },
@@ -198,9 +199,9 @@ module.exports = {
       try {
         const token = req.header("Authorization");
         const user = await users.nullifyToken(token);
-        res.json(user);
+        res.json({status:201,user});
       } catch (err) {
-        console.log(err.message);
+        console.log(err);
         res.status(500).send("server error");
       }
     },

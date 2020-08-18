@@ -1,4 +1,4 @@
-const { REGISTER_USER, LOGIN_USER, LOGOUT_USER, FORGOT_PASSWORD,FORGOT_PASSWORD_LINK } = require("../actionTypes");
+const { REGISTER_USER, LOGIN_USER, LOGOUT_USER, FORGOT_PASSWORD,FORGOT_PASSWORD_LINK, CHANGE_PASSWORD } = require("../actionTypes");
 
 const initialState = {
   user: null,
@@ -21,6 +21,10 @@ const userReducer = (state = initialState, actions) => {
       if (payload.error) {
         return { ...state, error: payload };
       } else return { ...state, user: payload };
+      case CHANGE_PASSWORD:
+        if (payload.error) {
+          return { ...state, error: payload };
+        } else return { ...state, user: payload };
       case FORGOT_PASSWORD:
         if (payload.error) {
           return { ...state, error: payload };

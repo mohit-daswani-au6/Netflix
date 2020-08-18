@@ -31,21 +31,20 @@ module.exports = {
     // -------------------products added by admin
     async add_movie(req, res) {
       try {
-        console.log(req.body)
-        console.log(req.files)
+        console.log("uploadinig started")
         const posterImage = await AWSsignedUrl(req.files.posterImage[0]);
         const backgroundImage = await AWSsignedUrl(
           req.files.backgroundImage[0]
         );
         const movie = await AWSsignedUrl(req.files.movie[0]);
-        console.log((movie))
-        console.log("dsaasdsadas",typeof((movie)))
+        const genre = await JSON.parse(req.body.genre)
         const obj={
           posterImage,
           movie,
           backgroundImage,
-          genre: JSON.parse(req.body.genre),
           ...req.body,
+          genre,
+          
         }
         console.log(obj)
         const newMovie = await movieSchema.create(obj);

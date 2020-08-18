@@ -12,6 +12,7 @@ let userSchema = new Schema(
     verified_email: { type: Boolean, default: 0 },
     phoneNo: { type: String, unique: true },
     resetToken: { type: String, trim: true },
+    isSubscribed:{type:Boolean,required:false}
   },
   { timestamps: true }
 );

@@ -5,6 +5,7 @@ module.exports = async (req, res, next) => {
             const userToken = req.header("Authorization")
             const user = await users.find({token:userToken})
             if (user) {
+                console.log("ss",user)
                 if (user[0].verified_email == true) {
                     req.user = user[0]
                 }
@@ -15,7 +16,7 @@ module.exports = async (req, res, next) => {
         next();
     }
     catch (err) {
-        console.log(err.message);
+        console.log(err);
         res.send("kindly login first")
     }
 }
