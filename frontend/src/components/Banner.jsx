@@ -1,27 +1,33 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Banner.css";
+import { withRouter, Link } from "react-router-dom";
 
-const Banner = ({ movies }) => {
+const Banner = ({ movies ,history}) => {
+  // const [imgurl, setimgurl] = useState(initialState)
   const movie = movies[Math.floor(Math.random() * movies.length)];
   function truncate(str, n) {
     return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+  }
+  const imgurl=`https://${movie.backgroundImage}`
+  const handleClick=async()=>{
+history.push("")
   }
   return (
     <header
       className="banner"
       style={{
         backgroundSize: "cover",
-        backgroundPosition: "center center",
-        backgroundImage: `url(${movie.posterImage})`,
+        backgroundPosition: "center",
+        backgroundImage: `url("${imgurl}")`,
       }}
     >
       <div className="banner_content">
         <h1 className="banner_title">{movie?.MovieName || movie?.title}</h1>
         <div className="banner_buttons">
-          <button className="banner_button">Play</button>
+         <Link to={`movies/${movie._id} `}> <button className="banner_button" >Play</button></Link>
           <button className="banner_button">My list</button>
           <div className="banner_description">
-            {truncate(movie?.description, 150)}
+            {truncate(movie?.title, 150)}
           </div>
         </div>
       </div>
@@ -30,4 +36,4 @@ const Banner = ({ movies }) => {
   );
 };
 
-export default Banner;
+export default withRouter(Banner);

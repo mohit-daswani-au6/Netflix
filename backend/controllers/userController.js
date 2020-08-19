@@ -1,7 +1,7 @@
 const users = require("../models/user");
 const email1 = require("../utils/nodeMailer");
 const { verify } = require("jsonwebtoken");
-const {hash}=require("bcryptjs")
+const { hash } = require("bcryptjs");
 const { validationResult } = require("express-validator");
 module.exports = {
   get: {
@@ -28,13 +28,16 @@ module.exports = {
           return res.status(400).send("Incorrect Credentials1");
         const user = await users.find_by_email_and_password(email, password);
         if (user.verified_email === false) {
-          return res.json({ message: "Please verify your email first" });
+          return res.json({
+            statusCode: 400,
+            error: "Please verify your email first",
+          });
         } else {
           const accesToken = await user.generateToken();
           res.status(201).json({
             statusCode: 201,
             token: accesToken,
-            user
+            user,
           });
         }
       } catch (err) {
@@ -172,26 +175,59 @@ module.exports = {
         if (password === "Invalid Credentials") {
           res.json({ status: "failed", error: "Bad request" });
         } else {
-          if (newpassword === cpassword) {            
+          if (newpassword === cpassword) {
             const hashedpassword = await hash(newpassword, 10);
             const resetPassword = await users.updateOne(
               { token: user.token },
               { password: hashedpassword },
               { new: true }
             );
-            res.status(200).json({ statusCode: 201, message: "password changed successfully" });
+            res.status(200).json({
+              statusCode: 201,
+              message: "password changed successfully",
+            });
           } else {
             res.json({ status: "failed", error: "Password doesn't match" });
           }
         }
       } catch (err) {
         console.log(err);
-        if(err.message==="Invalid old password") return res.json({status:"failed",error:err.message})
-        
+        if (err.message === "Invalid old password")
+          return res.json({ status: "failed", error: err.message });
+
+        res.status(500).send({ status: "failed", error: "Server Error" });
+      }
+    },
+    async ChangePhoneNumber(req, res) {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+      }
+      try {
+        const user = req.user;
+        const { password, newPhoneNo } = req.body;
+        const checkPassword = await users.findByPasswordToChangeEmailAndPhoneNo(user, password);
+        if (checkPassword === "Invalid Credentials")
+          return res.json({ status: "failed", error: "Bad request" });
+        const resetPhoneNo = await users.updateOne(
+          { token: user.token },
+          { phoneNo: newPhoneNo },
+          { new: true }
+        );
+        res.status(200).json({
+          statusCode: 201,
+          message: "phone number changed successfully",
+        });
+      } catch (err) {
+        console.log(err);
+        if (err.message === "Invalid password")
+          return res.json({ status: "failed", error: err.message });
+
         res.status(500).send({ status: "failed", error: "Server Error" });
       }
     },
   },
+
   //-------------------------------------------------------------------------------start of delete request
   delete1: {
     //------------------------------------------------------------------------user logout logic
@@ -199,7 +235,7 @@ module.exports = {
       try {
         const token = req.header("Authorization");
         const user = await users.nullifyToken(token);
-        res.json({status:201,user});
+        res.json({ status: 201, user });
       } catch (err) {
         console.log(err);
         res.status(500).send("server error");

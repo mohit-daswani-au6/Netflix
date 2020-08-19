@@ -38,7 +38,7 @@ const AccountPage = ({ user }) => {
               <br />
               <br />
 
-              <Link to="#"> Change phone number</Link>
+              <Link to="/user/changePhoneNumber"> Change phone number</Link>
             </Col>
           </Row>
           <hr />

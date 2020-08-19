@@ -25,7 +25,6 @@ module.exports = {
       try {
         const { movieId } = req.params;
         const user = req.user;
-        console.log(user);
         const watchlist = await watchListSchema.create({
           userId: user.id,
           movieId,

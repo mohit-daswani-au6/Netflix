@@ -5,7 +5,8 @@ import {
   LOGOUT_USER,
   EMAIL_VERIFICATION,
   FORGOT_PASSWORD,
-  CHANGE_PASSWORD
+  CHANGE_PASSWORD,
+  CHANGE_PHONE_NUMBER
 } from "../actionTypes";
 
 export const registerUser = (data1) => async (dispatch) => {
@@ -48,12 +49,13 @@ export const loginUser = (data1) => async (dispatch) => {
 };
 export const logoutUser = () => async (dispatch, getState) => {
   try {    
-    const usertoken = getState().userState.user.token;
-    console.log(usertoken)
+    const userJSON = localStorage.getItem("user");
+    const user = JSON.parse(userJSON);
+    const token = user.token;
     const { data } = await Axios.delete(`http://localhost:5555/user/logout`, {
       headers: {
         Accept: "application/json",
-        Authorization: usertoken,
+        Authorization: token,
       },
     });
     console.log(data);
@@ -126,6 +128,27 @@ export const ChangePassword = (data1) => async (dispatch,getState) => {
     );
     console.log(data)
     dispatch({ type: CHANGE_PASSWORD, payload: data });
+    return data;
+  } catch (err) {
+    alert("invalid credentials");
+    // console.log(err)
+  }
+};
+export const changePhoneNo = (data1) => async (dispatch,getState) => {
+  try {
+    const usertoken = getState().userState.user.token;
+    const { data } = await Axios.put(
+      `http://localhost:5555/user/changePhoneNumber`,
+      data1,
+      {
+        headers: {
+          Accept: "application/json",
+          Authorization:usertoken
+        },
+      }
+    );
+    console.log(data)
+    dispatch({ type: CHANGE_PHONE_NUMBER, payload: data });
     return data;
   } catch (err) {
     alert("invalid credentials");

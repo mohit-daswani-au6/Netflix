@@ -28,9 +28,9 @@ class HomePage extends Component {
   render() {
     return (
       <>
-        {!this.props.user ? (
+        {/* {!this.props.user ? (
           <Redirect to="/user/login" />
-        ) : (
+        ) : ( */}
           <div
             className="homePage"
             style={{
@@ -39,11 +39,12 @@ class HomePage extends Component {
           >
             <NetflixNav />
 
-            {/* {this.state.movies.length !== 0 ? (
+            {this.state.movies.length !== 0 ? (
           <>
             <NetflixNav />
-            <Banner movies={this.props.trendingMovies} />
-            </>):null} */}
+            <Banner movies={this.state.movies} />
+            </>):null}
+            <br/>
             <Row
               title="NETFLIX ORIGINALS"
               moviesURL={this.props.fetchNetflixOriginals}
@@ -82,7 +83,7 @@ class HomePage extends Component {
               moviesURL={this.props.getMoviesByGenre}
             />
           </div>
-        )}
+        {/* )} */}
       </>
     );
   }

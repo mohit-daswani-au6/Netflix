@@ -1,0 +1,9 @@
+.video{
+    width: auto;
+    height: -webkit-fill-available;
+}
+.videopage{
+    display: flex;
+    justify-content: center;
+    background: black;
+}

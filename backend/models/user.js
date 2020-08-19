@@ -100,6 +100,19 @@ userSchema.statics.findByPassword = async (user, oldpassword) => {
       throw err;
   }
 };
+userSchema.statics.findByPasswordToChangeEmailAndPhoneNo = async (user, password) => {
+  try {
+    console.log(user)
+      if(!user) throw new Error("Invalid Credentials");
+      console.log(password,user.password)
+      const isMatched = await compare(password, user.password);
+      if(!isMatched) throw new Error("Invalid password");
+      return user;
+  } catch (err) {
+      err.name = 'AuthError';
+      throw err;
+  }
+};
 //-------------------------------------------------------------------end
 //-----------------------------------------------------------logic to delete user by token
 userSchema.statics.delete_user_by_token = async (token) => {

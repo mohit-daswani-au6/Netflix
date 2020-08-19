@@ -27,13 +27,13 @@ class LoginPage extends Component {
     console.log(resp);
     if (resp.statusCode === 400) {
       console.log(resp.error);
+      setTimeout(() => {
+        this.setState({ error: "" });
+      }, 3000);
       this.setState({ error: resp.error });
     } else if (resp.statusCode === 201) {
       this.props.history.push("/");
     }
-    setTimeout(() => {
-      this.setState({ error: "" });
-    }, 3000);
   };
 
   render() {
@@ -68,7 +68,7 @@ class LoginPage extends Component {
         <Link to="/user/forgotPassword">forgot password?</Link>
         <br />
         <p>
-        New User?
+          New User?
           <button>
             <Link to="/user/register">Sign Up</Link>
           </button>

@@ -50,7 +50,7 @@ module.exports = {
         const newMovie = await movieSchema.create(obj);
         console.log(newMovie);
         await newMovie.save();
-        res.json(newMovie);
+        res.json({statusCode:201,newMovie});
       } catch (err) {
         console.log(err);
         res.send("serverError");

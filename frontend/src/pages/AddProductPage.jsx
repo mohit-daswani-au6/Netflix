@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { addMovie } from "../redux/actions/adminAction";
-class AddPrductPage extends Component {
+import { withRouter } from "react-router-dom";
+class AddProductPage extends Component {
   state = {
+    response: false,
     MovieName: "",
     title: "",
     description: "",
@@ -11,7 +13,7 @@ class AddPrductPage extends Component {
     backgroundImage: "",
     country: "",
     isReleased: false,
-    isPaid:false,
+    isPaid: false,
     rating: "",
     releasedDate: "",
     movie: "",
@@ -57,38 +59,18 @@ class AddPrductPage extends Component {
     fd.append("isPaid", this.state.isPaid);
     fd.append("runTime", this.state.runTime);
     fd.append("rating", this.state.rating);
-    fd.append("genre", JSON.stringify(genre));
-
-    // const obj = {
-    //   MovieName: this.state.MovieName,
-    //   title: this.state.title,
-    //   description: this.state.description,
-    //   language: this.state.language,
-    //   posterImage: this.state.posterImage,
-    //   backgroundImage: this.state.backgroundImage,
-    //   isReleased: this.state.isReleased,
-    //   releasedDate: this.state.releasedDate,
-    //   movie: this.state.movie,
-    //   country: this.state.country,
-    //   isAdult: this.state.isAdult,
-    //   runTime: this.state.runTime,
-    //   rating:this.state.rating,
-    //   genre: {
-    //     Action: this.state.Action,
-    //     Adventure: this.state.Adventure,
-    //     Comedy: this.state.Comedy,
-    //     Drama: this.state.Drama,
-    //     Horror: this.state.Horror,
-    //     Thriller: this.state.Thriller,
-    //   },
-    // };
+    fd.append("genre", await JSON.stringify(genre));
+    console.log(fd, this.props.addMovie);
     const response = await this.props.addMovie(fd);
     console.log(response);
+    // setTimeout(() => {
+    //   this.props.history.push("/admin/addProduct");
+    // }, 5000);
   };
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} encType="multipart/form-data">
+      <div>
         <h2>Name</h2>
         <input
           onChange={this.handleChange}
@@ -281,10 +263,10 @@ class AddPrductPage extends Component {
             <label htmlFor="Thriller">Thriller</label>
           </div>
         </div>
-        <input type="submit" value="submit" />
-      </form>
+        <input type="submit" onClick={this.handleSubmit} value="submit" />
+      </div>
     );
   }
 }
 
-export default connect(null, { addMovie })(AddPrductPage);
+export default connect(null, { addMovie })(withRouter(AddProductPage));
