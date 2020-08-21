@@ -3,30 +3,27 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import "../styles/changePassword.css";
 import { connect } from "react-redux";
-import { changePhoneNo } from "../redux/actions/userActions";
+import { changeEmail } from "../redux/actions/userActions";
 import { Link, withRouter, Redirect } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import NetflixNav from "../components/NetflixNav";
 import { Button } from "reactstrap";
 import Footer from "../components/Footer";
-const phoneRegExp = /^(\+\d{1,3}[- ]?)?\d{10}$/;
 
 const ChangePhoneNumber = Yup.object().shape({
   password: Yup.string().required("Required"),
-  newPhoneNo: Yup.string()
-    .matches(phoneRegExp, "Phone number is not valid")
-    .required("Required"),
+  email: Yup.string().email("Invalid email").required("Required"),
 });
 
-class ChangePhoneNoPage extends Component {
+class ChangeEmailPage extends Component {
   state = {
     error: "",
     success: false,
   };
   handleSubmit = async (data) => {
-    const { password, newPhoneNo } = data;
-    const obj = { password, newPhoneNo };
-    const resp = await this.props.changePhoneNo(obj);
+    const { password, email } = data;
+    const obj = { password, email };
+    const resp = await this.props.changeEmail(obj);
     console.log(this.props.user);
     console.log(resp);
     if (resp.status === "failed") {
@@ -44,11 +41,11 @@ class ChangePhoneNoPage extends Component {
   };
 
   render() {
-    const extrastyle = {
+    const extrastyle={
       position: "absolute",
       bottom: "0px",
       width: "100%",
-    };
+    }
     const userJSON = localStorage.getItem("user");
     const user = JSON.parse(userJSON);
     return (
@@ -58,13 +55,13 @@ class ChangePhoneNoPage extends Component {
           <Redirect to="/user/login" />
         ) : (
           <div className="cardForChange">
-            <h1>Change Phone Number</h1>
+            <h1>Change Email</h1>
             <br />
             <br />
             <Formik
               initialValues={{
+                email: "",
                 password: "",
-                newPhoneNo: "",
               }}
               validationSchema={ChangePhoneNumber}
               onSubmit={this.handleSubmit}
@@ -92,12 +89,12 @@ class ChangePhoneNoPage extends Component {
                       fontSize: "18px",
                       padding: "10px",
                     }}
-                    placeholder="Phone number"
-                    name="newPhoneNo"
-                    type="Number"
+                    placeholder="Email"
+                    name="email"
+                    type="email"
                   />
-                  {errors.newPhoneNo && touched.newPhoneNo ? (
-                    <div>{errors.newPhoneNo}</div>
+                  {errors.email && touched.email ? (
+                    <div>{errors.email}</div>
                   ) : (
                     <br />
                   )}
@@ -115,7 +112,9 @@ class ChangePhoneNoPage extends Component {
             ) : null}
           </div>
         )}
-        <Footer extrastyle={extrastyle} />
+        <Footer
+          extrastyle={extrastyle}
+        />
       </div>
     );
   }
@@ -123,6 +122,6 @@ class ChangePhoneNoPage extends Component {
 const mapStateToProps = (state) => ({
   user: state.userState.user,
 });
-export default connect(mapStateToProps, { changePhoneNo })(
-  withRouter(ChangePhoneNoPage)
+export default connect(mapStateToProps, { changeEmail })(
+  withRouter(ChangeEmailPage)
 );

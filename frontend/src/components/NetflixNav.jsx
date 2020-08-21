@@ -13,15 +13,14 @@ import {
 import { connect } from "react-redux";
 import { logoutUser } from "../redux/actions/userActions";
 // import { NavItem, NavLink } from "reactstrap";
-const NetflixNav = ({ logoutUser, history }) => {
+const NetflixNav = ({ logoutUser, history, color }) => {
   const [show, handleShow] = useState();
   const [searchBar, setSearchBar] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   const handleLogout = async () => {
     await logoutUser();
-    history.push("/user/login")
+    history.push("/user/login");
   };
   const handleSearchClick = () => {
     setSearchBar(!searchBar);
@@ -36,8 +35,12 @@ const NetflixNav = ({ logoutUser, history }) => {
       // window.removeEventListener("scroll")
     };
   }, []);
+
+  const handleClick = async () => {
+    setSearchBar(!searchBar);
+  };
   return (
-    <div className={`nav ${show && "nav_black"}`}>
+    <div className={`nav ${show && "nav_black"}`} style={{ background: color }}>
       <img
         className="nav_logo"
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1920px-Netflix_2015_logo.svg.png"
@@ -45,17 +48,17 @@ const NetflixNav = ({ logoutUser, history }) => {
       />
       <div style={{ display: "flex", marginLeft: "130px" }}>
         <p>
-          <NavLink className="navlinkStyle" to="/user/register">
+          <NavLink className="navlinkStyle" to="/">
             Home
           </NavLink>
         </p>
-        <p>
+        {/* <p>
           <NavLink className="navlinkStyle" to="/movies">
             Movies
           </NavLink>
-        </p>
+        </p> */}
         <p>
-          <NavLink className="navlinkStyle" to="/">
+          <NavLink className="navlinkStyle" to="/mylist">
             My List
           </NavLink>
         </p>
@@ -66,20 +69,11 @@ const NetflixNav = ({ logoutUser, history }) => {
         </p>
       </div>
       <div style={{ display: "flex" }}>
-        <InputGroup>
-          <input style={{ height: "41px" }} placeholder="Enter Movie Name..." />
-          <InputGroupAddon addonType="append">
-            <InputGroupText>
-              {" "}
-              <img
-                className="search"
-                style={{ height: "30px", width: "30px" }}
-                src="https://www.iconsdb.com/icons/preview/white/search-3-xxl.png"
-                alt="searchIcon"
-              />
-            </InputGroupText>
-          </InputGroupAddon>
-        </InputGroup>
+        <input
+          className="search-input"
+          type="search"
+          placeholder="Enter Movie Name..."
+        />
         <Dropdown
           isOpen={dropdownOpen}
           style={{ marginLeft: "10px" }}

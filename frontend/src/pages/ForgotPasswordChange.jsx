@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { connect } from "react-redux";
 import { ChangeforgotPassword } from "../redux/actions/userActions";
 import { Link, withRouter } from "react-router-dom";
+import NavBar from "../components/NavBar";
 const ChangePasswordSchema = Yup.object().shape({
   password: Yup.string()
     .min(8, "password must be minimum length 0f 8!")
@@ -40,6 +41,8 @@ class ForgotPasswordChange extends Component {
   render() {
     return (
       <div>
+              <NavBar/>
+
         <h1>Change password</h1>
         <Formik
           initialValues={{

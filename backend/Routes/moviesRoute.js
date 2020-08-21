@@ -10,7 +10,7 @@ router.get("/movies/TrendingMovies",authentication, get.fetchTrendingMovies);
 router.get("/movies/:genres",authentication, get.getMovieByGenre);
 router.get("/user/watchlist",authentication, get1.getUserWatchlist);
 router.get("/movie/:movieId",authentication, get.singleMovie)
-router.post("/watchList/:movieId",authentication, post1.addToWatchlist)
+router.get("/watchList/:movieId",authentication, post1.addToWatchlist)
 router.get("/searchMovies",authentication, get.search_movie)
 router.get("/movies/language/:language",authentication, get.getMovieByLanguage)
 module.exports = router;

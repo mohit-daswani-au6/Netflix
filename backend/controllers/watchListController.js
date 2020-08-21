@@ -1,5 +1,6 @@
 const movieSchema = require("../models//movies");
 const watchListSchema = require("../models/watchlist");
+const { find } = require("../models//movies");
 module.exports = {
   get1: {
     async getUserWatchlist(req, res) {
@@ -25,12 +26,22 @@ module.exports = {
       try {
         const { movieId } = req.params;
         const user = req.user;
-        const watchlist = await watchListSchema.create({
+        const watchlist = await watchListSchema.find({
           userId: user.id,
           movieId,
         });
         console.log(watchlist);
-        res.send(watchlist);
+        if (watchlist.length === 0) {
+          const watchlist1 = await watchListSchema.create({
+            userId: user.id,
+            movieId,
+          });
+          console.log(watchlist);
+          res.send({ statusCode: 201, watchlist1 });
+        } else {
+          watchlist[0].remove()
+          res.send({ statusCode: 201,message: "removed suuccessfully"});
+        }
       } catch (err) {
         console.log(err);
         res.send("serverError");

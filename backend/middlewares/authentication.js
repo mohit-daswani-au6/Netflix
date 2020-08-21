@@ -1,6 +1,7 @@
 var users = require("../models/user");
 module.exports = async (req, res, next) => {
     try {
+        console.log("qqq",req.header("Authorization"))
         if (req.header("Authorization")) {
             const userToken = req.header("Authorization")
             const user = await users.find({token:userToken})
@@ -17,6 +18,6 @@ module.exports = async (req, res, next) => {
     }
     catch (err) {
         console.log(err);
-        res.send("kindly login first")
+        res.send("kindly login first please")
     }
 }

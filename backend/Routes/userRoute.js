@@ -62,6 +62,14 @@ router.put(
   ],
   put.ChangePhoneNumber
 );
+router.put(
+  "/user/changeEmail",
+  authentication,
+  [
+    check("email").isEmail().withMessage("Invalid Email")
+  ],
+  put.ChangeEmail
+);
 //-------------------------------------------------------Delete Request Route
 router.delete("/user/logout", delete1.logout_user);
 

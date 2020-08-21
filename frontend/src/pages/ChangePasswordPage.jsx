@@ -1,9 +1,14 @@
 import React, { Component } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import "../styles/changePassword.css"
 import { connect } from "react-redux";
 import { ChangePassword } from "../redux/actions/userActions";
 import { Link, withRouter, Redirect } from "react-router-dom";
+import NavBar from "../components/NavBar";
+import NetflixNav from "../components/NetflixNav";
+import { Button } from "reactstrap";
+import Footer from "../components/Footer";
 const ChangePasswordSchema = Yup.object().shape({
   password: Yup.string()
     .min(8, "password must be minimum length 0f 8!")
@@ -43,11 +48,22 @@ class ChangePasswordPage extends Component {
   };
 
   render() {
+    const extrastyle={
+      position: "absolute",
+      bottom: "0px",
+      width: "100%",
+    }
+    const userJSON = localStorage.getItem("user");
+    const user = JSON.parse(userJSON);
     return (
       <div>
-          {!this.props.user?<Redirect to="/user/login"/>:
-          <>
+      <NetflixNav color="black" />
+
+          {!user?<Redirect to="/user/login"/>:
+          <div className="cardForChange">
         <h1>Change password</h1>
+        <br/>
+        <br/>
         <Formik
           initialValues={{
             oldpassword: "",
@@ -59,30 +75,31 @@ class ChangePasswordPage extends Component {
         >
           {({ errors, touched }) => (
             <Form style={{ display: "flex", flexDirection: "column" }}>
-              <h3>old password</h3>
-              <Field name="oldpassword" type="password" />
+              <Field style={{background:"white",fontSize: "18px", padding: "10px"}} placeholder="Current password" name="oldpassword" type="password" />
               {errors.oldpassword && touched.oldpassword ? (
-                <div>{errors.oldpassword}</div>
-              ) : null}
-              <h3>new password</h3>
-              <Field name="password" type="password" />
+                <p>{errors.oldpassword}</p>
+              ) : <br/>}
+              
+              <Field style={{background:"white",fontSize: "18px", padding: "10px"}} placeholder="New password (8-32 characters)" name="password" type="password" />
               {errors.password && touched.password ? (
-                <div>{errors.password}</div>
-              ) : null}
-              <h3>confirm password</h3>
-              <Field name="cpassword" type="password" />
+                <p>{errors.password}</p>
+              ) : <br/>}
+              <Field style={{background:"white",fontSize: "18px", padding: "10px"}} placeholder="Confirm new password" name="cpassword" type="password" />
               {errors.cpassword && touched.cpassword ? (
-                <div>{errors.cpassword}</div>
-              ) : null}
+                <p>{errors.cpassword}</p>
+              ) : <br/>}
               <br />
               {this.state.error ? <p>{this.state.error}</p> : null}
 
-              <button type="submit">Submit</button>
+              <Button color="primary" type="submit">Save</Button>
             </Form>
           )}
         </Formik>
         {this.state.success ? <h1>password successfully changed Redirecting to login</h1> : null}
-        </>}
+        </div>}
+        <Footer
+          extrastyle={extrastyle}
+        />
       </div>
     );
   }

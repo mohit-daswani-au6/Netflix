@@ -1,74 +1,38 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import "../styles/netflixNav.css";
 import { logoutUser } from "../redux/actions/userActions";
-
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  NavbarText,
-} from "reactstrap";
 import { NavLink, withRouter } from "react-router-dom";
-const NavBar = ({ user, logoutUser,history }) => {
-  const [isOpen, setIsOpen] = useState(false);
+import { Button } from "reactstrap";
+const NavBar = ({ logoutUser, history }) => {
   const handleLogout = async () => {
     await logoutUser();
-    history.push("/")
+    history.push("/user/login");
   };
-  const toggle = () => setIsOpen(!isOpen);
-
+  let user=null;
+  if (localStorage.getItem("user")) {
+    const userJSON = localStorage.getItem("user");
+    user = JSON.parse(userJSON);
+  }
   return (
-    <div>
-      <Navbar color="light" light expand="md">
-        <NavbarBrand to="/">reactstrap</NavbarBrand>
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav className="mr-auto" navbar>
-            {!user ? (
-              <>
-                <NavItem>
-                  <NavLink to="/user/register">Register</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink to="/user/login">Login</NavLink>
-                </NavItem>
-              </>
-            ) : null}
-            {user ? (
-              <NavItem>
-                <NavLink to="/user/login" onClick={handleLogout}>
-                  Logout
-                </NavLink>
-              </NavItem>
-            ) : null}
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                Options
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>Option 1</DropdownItem>
-                <DropdownItem>Option 2</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>Reset</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          </Nav>
-          <NavbarText>Simple Text</NavbarText>
-        </Collapse>
-      </Navbar>
+    <div className={`nav`}>
+      <img 
+        style={{width:"150px"}}
+        className="nav_logo"
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1920px-Netflix_2015_logo.svg.png"
+        alt="Netflix logo"
+      />
+      {user?(
+        <Button color="link" style={{color:"black",float:"right"}} className="ButtonStyle" onClick={handleLogout}>
+          Logout
+        </Button>
+      ) : null}
     </div>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    user: state.userState.user,
-  };
-};
-export default connect(mapStateToProps, { logoutUser })(withRouter(NavBar));
+// const mapStateToProps = (state) => {
+//   return {
+//     user: state.userState.user,
+//   };
+// };
+export default connect(null, { logoutUser })(withRouter(NavBar));

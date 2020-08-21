@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import "../styles/registerPage.css"
 import { connect } from "react-redux";
 import { loginUser } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
+import NavBar from "../components/NavBar";
+import { Button } from "reactstrap";
 const loginSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
+  email: Yup.string().email("Invalid email").required("Please enter a valid email address."),
   password: Yup.string()
     .min(8, "password must be minimum length 0f 8!")
     .matches(/[a-z]/, "must have lowercase")
@@ -38,41 +41,44 @@ class LoginPage extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Login</h1>
-        <Formik
-          initialValues={{
-            email: "",
-            password: "",
-          }}
-          validationSchema={loginSchema}
-          onSubmit={this.handleSubmit}
-        >
-          {({ errors, touched }) => (
-            <Form style={{ display: "flex", flexDirection: "column" }}>
-              <h3>email</h3>
-              <Field name="email" type="email" />
-              {errors.email && touched.email ? <div>{errors.email}</div> : null}
-              <h3>password</h3>
-              <Field name="password" type="password" />
-              {errors.password && touched.password ? (
-                <div>{errors.password}</div>
-              ) : null}
-              <br />
-              {this.state.error ? <p>{this.state.error}</p> : null}
-
-              <button type="submit">Submit</button>
-            </Form>
-          )}
-        </Formik>
-        <Link to="/user/forgotPassword">forgot password?</Link>
-        <br />
-        <p>
-          New User?
-          <button>
-            <Link to="/user/register">Sign Up</Link>
-          </button>
-        </p>
+      <div className="pageLayout">
+        <NavBar />
+        <div className="boxstyle">
+          <h1 style={{color:"white"}}>Sign In</h1>
+          <br/>
+          <br/>
+          <Formik
+            initialValues={{
+              email: "",
+              password: "",
+            }}
+            validationSchema={loginSchema}
+            onSubmit={this.handleSubmit}
+          >
+            {({ errors, touched }) => (
+              <Form style={{ display: "flex", flexDirection: "column",color:"coral" }}>
+                <Field style={{fontSize:"18px",padding:"10px"}} className="input" name="email" type="email" placeholder="Email"/>
+                {errors.email && touched.email ? (
+                  <p>{errors.email}</p>
+                ) : <br/>}
+                <br/>
+                <Field style={{fontSize:"18px",padding:"10px"}} name="password" type="password" placeholder="Password" />
+                {errors.password && touched.password ? (
+                  <p>{errors.password}</p>
+                ) : <br/>}
+                {this.state.error ? <p>{this.state.error}</p> : null}
+                <Button size="lg" color="danger" type="submit">Submit</Button>
+              </Form>
+            )}
+          </Formik>
+          <Link to="/user/forgotPassword" style={{float: "right",fontSize:"13px",color:"#cacaca"}}>forgot password?</Link>
+          <br />
+          <br />
+          <p style={{color:"#cacaca"}}>
+            New to Netflix? 
+              <Link to="/user/register" style={{fontSize:"17px",color:"white"}}> Sign Up Now</Link>
+          </p>
+        </div>
       </div>
     );
   }

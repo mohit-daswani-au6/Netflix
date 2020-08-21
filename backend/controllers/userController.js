@@ -198,6 +198,34 @@ module.exports = {
         res.status(500).send({ status: "failed", error: "Server Error" });
       }
     },
+    async ChangeEmail(req, res) {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+      }
+      try {
+        const user = req.user;
+        const { password, email } = req.body;
+        const checkPassword = await users.findByPasswordToChangeEmailAndPhoneNo(user, password);
+        if (checkPassword === "Invalid Credentials")
+          return res.json({ status: "failed", error: "Bad request" });
+        const resetEmail = await users.updateOne(
+          { token: user.token },
+          { email: email },
+          { new: true }
+        );
+        res.status(200).json({
+          statusCode: 201,
+          message: "Email changed successfully",
+        });
+      } catch (err) {
+        console.log(err);
+        if (err.message === "Invalid password")
+          return res.json({ status: "failed", error: err.message });
+
+        res.status(500).send({ status: "failed", error: "Server Error" });
+      }
+    },
     async ChangePhoneNumber(req, res) {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {

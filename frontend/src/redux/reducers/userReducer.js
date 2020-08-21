@@ -6,6 +6,7 @@ const {
   FORGOT_PASSWORD_LINK,
   CHANGE_PASSWORD,
   CHANGE_PHONE_NUMBER,
+  CHANGE_EMAIL,
 } = require("../actionTypes");
 
 const initialState = {
@@ -41,6 +42,10 @@ const userReducer = (state = initialState, actions) => {
         if (payload.error) {
           return { ...state, error: payload };
         } else return { ...state, user: payload };
+        case CHANGE_EMAIL:
+          if (payload.error) {
+            return { ...state, error: payload };
+          } else return { ...state, user: payload };
     case FORGOT_PASSWORD:
       if (payload.error) {
         return { ...state, error: payload };

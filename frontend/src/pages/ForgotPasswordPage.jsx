@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { connect } from "react-redux";
 import { forgotPasswordLink } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
+import NavBar from "../components/NavBar";
 const forgotPasswordSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
 });
@@ -33,6 +34,7 @@ class ForgotPasswordPage extends Component {
   render() {
     return (
       <div>
+              <NavBar/>
         <h1>Forgot Password?</h1>
         <Formik
           initialValues={{

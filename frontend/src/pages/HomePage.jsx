@@ -19,18 +19,25 @@ class HomePage extends Component {
   componentDidMount() {
     const fetchMovies = async () => {
       const response = await this.props.getAllMovies();
-      if (response.statusCode === 200) {
-        this.setState({ movies: response.movies });
+      if (response) {
+        if (response.statusCode === 200) {
+          this.setState({ movies: response.movies });
+        }
       }
     };
     fetchMovies();
   }
+
   render() {
+    const userJSON = localStorage.getItem("user");
+    const user = JSON.parse(userJSON);
     return (
       <>
-        {/* {!this.props.user ? (
+        <NetflixNav />
+
+        {!user ? (
           <Redirect to="/user/login" />
-        ) : ( */}
+        ) : (
           <div
             className="homePage"
             style={{
@@ -40,11 +47,12 @@ class HomePage extends Component {
             <NetflixNav />
 
             {this.state.movies.length !== 0 ? (
-          <>
-            <NetflixNav />
-            <Banner movies={this.state.movies} />
-            </>):null}
-            <br/>
+              <>
+                <NetflixNav />
+                <Banner movies={this.state.movies} />
+              </>
+            ) : null}
+            <br />
             <Row
               title="NETFLIX ORIGINALS"
               moviesURL={this.props.fetchNetflixOriginals}
@@ -83,15 +91,15 @@ class HomePage extends Component {
               moviesURL={this.props.getMoviesByGenre}
             />
           </div>
-        {/* )} */}
+        )}
       </>
     );
   }
 }
-const mapStateToProps = (state) => ({
-  user: state.userState.user,
-});
-export default connect(mapStateToProps, {
+// const mapStateToProps = (state) => ({
+//   user: state.userState.user,
+// });
+export default connect(null, {
   getAllMovies,
   trendingMovies,
   getMoviesByGenre,

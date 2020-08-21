@@ -1,5 +1,5 @@
 const SubscribeSchema = require("../models/subscriptionPlans");
-const randomstring = require("randomstring")
+const randomstring = require("randomstring");
 
 const { RAZOR_PAY_KEY_ID, RAZOR_PAY_SECRET } = process.env;
 const paymentSchema = require("../models/payment");
@@ -15,9 +15,10 @@ module.exports = {
     async getSubscriptionOfNetflix(req, res) {
       try {
         const user = req.user;
-        const { plan, amount } = req.body;
+        const { type, price } = req.body;
+        console.log((price * 100).toString());
         let options = {
-          amount: amount, // amount in the smallest currency unit
+          amount: (price * 100).toString(), // amount in the smallest currency unit
           currency: "INR",
           receipt: randomstring.generate(7),
           payment_capture: 1,
@@ -25,8 +26,8 @@ module.exports = {
         await instance.orders
           .create(options, (err, order) => {
             if (err) throw err;
-            console.log(order);
             val = order;
+            console.log("order", val);
           })
           .then(() => {
             let paymentobj = {
@@ -38,18 +39,8 @@ module.exports = {
             let yahoo = async () => {
               let order = await paymentSchema.create(paymentobj);
               order.save();
-              const subscription = await SubscribeSchema.create({
-                userId: user.id,
-                plan: plan,
-                planStartDate: Date(Date.now()).toString(),
-                planExpiryDate:
-                  plan === "monthly"
-                    ? new Date(Date.now() + 2592000000).toString()
-                    : new Date(Date.now() + 31536000000).toString(),
-              });
-              await subscription.save();
-              console.log(subscription);
-              res.json({ statusCode: 201, subscription });
+
+              res.json({ statusCode: 201, order });
             };
             yahoo();
           });
@@ -59,10 +50,42 @@ module.exports = {
       }
     },
     async razor_pay_success(req, res) {
-        console.log(req.body)
-        const {razorpay_payment_id,razorpay_order_id,razorpay_signature}=req.body
-        await payment1.findOneAndUpdate({order_id:razorpay_order_id}, {$set:{razor_payment_id:razorpay_payment_id,razor_signature:razorpay_signature}},{new:true})
-     }
+      try {
+        const {
+          razorpay_payment_id,
+          razorpay_order_id,
+          razorpay_signature,
+        } = req.body;
+        const paid=await paymentSchema.findOneAndUpdate(
+          { order_id: razorpay_order_id },
+          {
+            $set: {
+              razor_payment_id: razorpay_payment_id,
+              razor_signature: razorpay_signature,
+            },
+          },
+          { new: true }
+        );
+        console.log("paid",paid)
+        if(paid){
+        const subscription = await SubscribeSchema.create({
+          userId: user.id,
+          plan: type,
+          planStartDate: Date(Date.now()).toString(),
+          planExpiryDate:
+            type === "Monthly"
+              ? new Date(Date.now() + 2592000000).toString()
+              : new Date(Date.now() + 31536000000).toString(),
+        });
+        await subscription.save();
+        console.log(subscription);
+        res.json({ statusCode: 200, message: "payment successfully made" });
+      }
+      } catch (err) {
+        console.log(err);
+        res.send("serverError");
+      }
+    },
   },
 
   get: {

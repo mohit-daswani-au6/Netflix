@@ -6,7 +6,8 @@ import {
   EMAIL_VERIFICATION,
   FORGOT_PASSWORD,
   CHANGE_PASSWORD,
-  CHANGE_PHONE_NUMBER
+  CHANGE_PHONE_NUMBER,
+  CHANGE_EMAIL
 } from "../actionTypes";
 
 export const registerUser = (data1) => async (dispatch) => {
@@ -149,6 +150,27 @@ export const changePhoneNo = (data1) => async (dispatch,getState) => {
     );
     console.log(data)
     dispatch({ type: CHANGE_PHONE_NUMBER, payload: data });
+    return data;
+  } catch (err) {
+    alert("invalid credentials");
+    // console.log(err)
+  }
+};
+export const changeEmail = (data1) => async (dispatch,getState) => {
+  try {
+    const usertoken = getState().userState.user.token;
+    const { data } = await Axios.put(
+      `http://localhost:5555/user/changeEmail`,
+      data1,
+      {
+        headers: {
+          Accept: "application/json",
+          Authorization:usertoken
+        },
+      }
+    );
+    console.log(data)
+    dispatch({ type: CHANGE_EMAIL, payload: data });
     return data;
   } catch (err) {
     alert("invalid credentials");

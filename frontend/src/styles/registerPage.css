@@ -1,17 +1,41 @@
 .Card {
-    display: flex;
-    flex-direction: column;
-    width: 400px;
-    margin-top: 10px;
-    height: 400px;
-    justify-content: center;
-    background: beige;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  margin-top: 10px;
+  height: 400px;
+  justify-content: center;
+  background: beige;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+  align-items: center;
 }
-.Card h4{
+.Card h4 {
+  position: relative;
+  right: 50px;
+}
+.boxstyle {
+    width: 350px;
+    margin: auto;
+    height: 600px;
+    padding: 40px;
+    background: black;
+    padding: 40px;
     position: relative;
-    right: 50px;
+    top: 100px;
+}
+input{
+    height:45px;
+    font-size:18px;
+    background: #4b4747;
+}
+.pageLayout{
+  height: 730px;
+  background-image: url("https://bramptonist.com/wp-content/uploads/2018/06/netflix-image.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;  
+  background-size: cover;
+  backface-visibility: hidden;
+
 }

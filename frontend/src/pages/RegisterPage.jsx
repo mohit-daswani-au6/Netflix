@@ -4,6 +4,8 @@ import * as Yup from "yup";
 import { connect } from "react-redux";
 import { registerUser } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
+import NavBar from "../components/NavBar";
+import { Button } from "reactstrap";
 const phoneRegExp = /^(\+\d{1,3}[- ]?)?\d{10}$/;
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
@@ -55,10 +57,12 @@ class RegisterPage extends Component {
 
   render() {
     return (
-      <>
+      <div className="pageLayout">
+        <NavBar />
+
         {!this.state.emailVerificaionPage ? (
-          <div>
-            <h1>Signup</h1>
+          <div className="boxstyle">
+            <h1 style={{ color: "white" }}>Sign Up</h1>
             <Formik
               initialValues={{
                 name: "",
@@ -70,45 +74,69 @@ class RegisterPage extends Component {
               onSubmit={this.handleSubmit}
             >
               {({ errors, touched }) => (
-                <Form style={{ display: "flex", flexDirection: "column" }}>
-                  <h3>name</h3>
-                  <Field name="name" />
-                  {errors.name && touched.name ? (
-                    <div>{errors.name}</div>
-                  ) : null}
-                  <h3>email</h3>
-                  <Field name="email" type="email" />
+                <Form
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    color: "coral",
+                  }}
+                >
+                  <Field
+                    className="input"
+                    placeholder="Name"
+                    style={{ fontSize: "18px", padding: "10px", marginTop:"15px"
+ }}
+                    name="name"
+                  />
+                  {errors.name && touched.name ? <p>{errors.name}</p> : <br/>}
+                  <Field
+                    className="input"
+                    placeholder="Email"
+                    style={{ fontSize: "18px", padding: "10px", 
+ }}
+                    name="email"
+                    type="email"
+                  />
                   {this.state.error.email ? (
                     <p>{this.state.error.email}</p>
                   ) : null}
-                  {errors.email && touched.email ? (
-                    <div>{errors.email}</div>
-                  ) : null}
-                  <h3>password</h3>
-                  <Field name="password" type="password" />
+                  {errors.email && touched.email ? <p>{errors.email}</p> : <br/>}
+                  <Field
+                    className="input"
+                    placeholder="Password"
+                    style={{ fontSize: "18px", padding: "10px", 
+ }}
+                    name="password"
+                    type="password"
+                  />
                   {errors.password && touched.password ? (
-                    <div>{errors.password}</div>
-                  ) : null}
-                  <h3>phone number</h3>
-                  <Field name="phoneNo" type="number" />
+                    <p>{errors.password}</p>
+                  ) : <br/>}
+                  <Field
+                    className="input"
+                    placeholder="Phone number"
+                    style={{ fontSize: "18px", padding: "10px", 
+ }}
+                    name="phoneNo"
+                    type="number"
+                  />
                   {this.state.error.phoneNo ? (
                     <p>{this.state.error.phoneNo}</p>
                   ) : null}
 
                   {errors.phoneNo && touched.phoneNo ? (
-                    <div>{errors.phoneNo}</div>
-                  ) : null}
+                    <p>{errors.phoneNo}</p>
+                  ) : <br/>}
                   <br />
-                  <button type="submit">Submit</button>
+                  <Button size="lg" color="danger" type="submit">Submit</Button>
                 </Form>
               )}
             </Formik>
             <br />
-            <p>
-              Already a user?
-              <button>
-                <Link to="/user/login">Sign in</Link>
-              </button>
+            <br/>
+            <p style={{color:"#cacaca"}}>
+              Already a user? 
+              <Link style={{fontSize:"17px",color:"white"}} to="/user/login"> Sign In</Link>
             </p>
           </div>
         ) : (
@@ -122,7 +150,7 @@ class RegisterPage extends Component {
             </button>
           </div>
         )}
-      </>
+      </div>
     );
   }
 }
