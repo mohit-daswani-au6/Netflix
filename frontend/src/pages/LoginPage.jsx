@@ -3,6 +3,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import "../styles/registerPage.css"
 import { connect } from "react-redux";
+import Footer from "../components/Footer";
 import { loginUser } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
@@ -40,6 +41,13 @@ class LoginPage extends Component {
   };
 
   render() {
+    const extrastyle={
+      background:"black",
+      margin:"0px",
+      padding:"0px 100px",
+      width:"100%",
+      color:"white"
+    }
     return (
       <div className="pageLayout">
         <NavBar />
@@ -79,6 +87,7 @@ class LoginPage extends Component {
               <Link to="/user/register" style={{fontSize:"17px",color:"white"}}> Sign Up Now</Link>
           </p>
         </div>
+        <Footer extrastyle={extrastyle}/>
       </div>
     );
   }

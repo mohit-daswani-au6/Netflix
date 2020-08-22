@@ -46,7 +46,7 @@ module.exports = {
     },
     async search_movie(req, res) {
       try {
-        const { value } = req.body;
+        const value = req.query.value;
         console.log(value);
         const movie = await movieSchema.find({
           MovieName: { $regex: value, $options: "i" },
@@ -81,6 +81,15 @@ module.exports = {
     async fetchTopRatedMovies(req, res) {
       try {
         const movies = await movieSchema.find({}).sort({ rating: -1 });
+        res.json({ statusCode: 201, movies });
+      } catch (err) {
+        console.log(err);
+        res.send("serverError");
+      }
+    },
+    async fetchLatestMovies(req, res) {
+      try {
+        const movies = await movieSchema.find({}).sort({ createdAt: 1 });
         res.json({ statusCode: 201, movies });
       } catch (err) {
         console.log(err);

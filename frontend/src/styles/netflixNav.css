@@ -38,14 +38,14 @@ p{
   }
 .search-input {
     width: 0px;
-    opacity: 0.5;
+    opacity: 1;
     box-sizing: border-box;
     height: 30px;
     overflow: hidden;
-    border: 1px solid gray;
+    border: 1px solid transparent;
     border-radius: 4px;
     font-size: 16px;
-    background-color: gray;
+    background-color: transparent;
     background-image: url("https://getdrawings.com/free-icon-bw/search-icon-white-png-10.png");
     background-size: 25px;
     background-position: 2px 3px; 
@@ -57,4 +57,5 @@ p{
   
 .search-input:focus {
     width: 100%;
+    background: black;
   }

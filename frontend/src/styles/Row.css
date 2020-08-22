@@ -1,6 +1,6 @@
-.row1{
-    color: white;
-    margin-left: 20px;
+.row1 {
+  color: white;
+  margin-left: 20px;
 }
 .row_posters {
   display: flex;
@@ -18,31 +18,69 @@
   max-height: 100%;
   margin-right: 10px;
   transition: transform 600ms;
-  transition: .5s ease;
+  transition: 0.5s ease;
   backface-visibility: hidden;
 }
 .container:hover .row_poster {
   transform: scale(1.08);
   opacity: 0.2;
-
 }
 .container:hover .addToWatchlist {
   opacity: 1;
 }
 .addToWatchlist {
-  transition: .5s ease;
+  position: relative;
+  left: 240px;
+  bottom: 50px;
+  background-color: white;
+  background-image: url("https://icons-for-free.com/iconfiles/png/512/add+photo+instagram+upload+icon-1320184027593509107.png");
+  background-size: 70px;
+  background-position: -17px -17px;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  padding: 0px 15px 0px 15px;
+  -webkit-transition: width 0.4s;
+  transition: 0.5s ease;
   opacity: 0;
-  /* position: absolute;
-  /* top: 50%; */
-  /* left: 50%; */ 
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   text-align: center;
 }
-.row_posterLarge{
+.container:hover .removeMylist {
+  opacity: 1;
+}
+.removeMylist {
+  position: relative;
+  left: 285px;
+  bottom: 50px;
+  height: 40px;
+  width: 40px;
+  background-color: white;
+  background-image: url("https://image.flaticon.com/icons/png/512/87/87932.png");
+  background-size: 40px;
+  background-position: -3px -3px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  padding: 0px 15px 0px 15px;
+  -webkit-transition: width 0.4s;
+  transition: 0.5s ease;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+.row_posterLarge {
   height: 350px;
   width: 250px;
 }
-.row_posterLarge:hover{
-    transform: scale(1.09);
+.row_posterLarge:hover {
+  transform: scale(1.09);
 }
+.shortrow{
+  position: relative;
+    left: -20px;
+    top: 75px;
+}
+

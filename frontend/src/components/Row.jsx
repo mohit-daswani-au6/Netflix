@@ -3,6 +3,9 @@ import "../styles/Row.css";
 import { Link, withRouter } from "react-router-dom";
 import { addToWatchlist } from "../redux/actions/watchlistAction";
 import { connect } from "react-redux";
+import { Button } from "reactstrap";
+import Banner from "./Banner";
+import MovieDetailPopup from "./MovieDetailPopup";
 const Row = ({
   title,
   moviesURL,
@@ -11,9 +14,10 @@ const Row = ({
   addToWatchlist,
   list,
   styling,
-  history
+  history,
 }) => {
   const [Movies, setmovies] = useState([]);
+  const [MovieDetail, setmovieDetail] = useState([]);
   const [Success, setSuccess] = useState(false);
   useEffect(() => {
     const fetchMovies = async () => {
@@ -24,25 +28,29 @@ const Row = ({
     };
     fetchMovies();
   }, []);
+  const handlePopup = async (e) => {
+    e.preventDefault();
+    const movie=[]
+    movie.push(JSON.parse(e.target.value));
+    // console.log(e.target.value)
+    setmovieDetail(movie)
+  };
+  // console.log(MovieDetail)
   const handleRemoveWatchlist = async (e) => {
     e.preventDefault();
     console.log(e.target.value);
     const response = await addToWatchlist(e.target.value);
     if (response.statusCode === 201) {
       setSuccess(true);
-      // setTimeout(() => {
-        window.location.reload(false);
-            // }, 1000);
+      window.location.reload(false);
     }
   };
   const handleAddWatchlist = async (e) => {
     e.preventDefault();
-    console.log(e.target.value);
     const response = await addToWatchlist(e.target.value);
     console.log(response);
   };
   return (
-
     <div className="row1" style={{ styling }}>
       <h2 style={{ marginLeft: "20px" }}>{title}</h2>
       <br />
@@ -59,28 +67,34 @@ const Row = ({
                     alt={movie.MovieName}
                   />
                 </Link>
+                {/* <button
+                  className="popup"
+                  value={JSON.stringify(movie)}
+                  onClick={handlePopup}
+                /> */}
                 {list ? (
                   <button
-                    className="addToWatchlist"
+                    className={`removeMylist ${
+                      Movies.length <= 3 && "shortrow"
+                    }`}
                     value={movie._id}
+                    title="Remove from my list"
                     onClick={handleRemoveWatchlist}
-                  >
-                    remove
-                  </button>
+                  />
                 ) : (
                   <button
                     className="addToWatchlist"
                     value={movie._id}
+                    title="Add to my list"
                     onClick={handleAddWatchlist}
-                  >
-                    add
-                  </button>
+                  />
                 )}
-              
               </div>
             ))
           : null}
       </div>
+      {/* {console.log(MovieDetail)}
+      <MovieDetailPopup movie={MovieDetail} /> */}
     </div>
   );
 };

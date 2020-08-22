@@ -4,8 +4,14 @@ import { getWatchlist } from "../redux/actions/watchlistAction";
 import { connect } from "react-redux";
 import "../styles/listPage.css";
 import NetflixNav from "../components/NetflixNav";
+import Footer from "../components/Footer";
 const MylistPage = ({ getWatchlist }) => {
-
+const extrastyle={
+  margin: "0px",
+    background: "black",
+    padding: "0 100px",
+    color:"white"
+}
   return (
     <>
     <NetflixNav/>
@@ -19,10 +25,10 @@ const MylistPage = ({ getWatchlist }) => {
         paddingTop:"50px"
       }}
     >
-
       <Row title="My list"moviesURL={getWatchlist} list="true" />
     </div>
     </div>
+    <Footer extrastyle={extrastyle}/>
     </>
   );
 };

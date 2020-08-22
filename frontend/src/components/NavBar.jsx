@@ -15,7 +15,7 @@ const NavBar = ({ logoutUser, history }) => {
     user = JSON.parse(userJSON);
   }
   return (
-    <div className={`nav`}>
+    <div className={`nav`} style={{display:"flex",justifyContent:"flex-end"}}>
       <img 
         style={{width:"150px"}}
         className="nav_logo"
@@ -23,8 +23,8 @@ const NavBar = ({ logoutUser, history }) => {
         alt="Netflix logo"
       />
       {user?(
-        <Button color="link" style={{color:"black",float:"right"}} className="ButtonStyle" onClick={handleLogout}>
-          Logout
+        <Button color="link" style={{color:"black",fontSize:"25px"}} className="ButtonStyle" onClick={handleLogout}>
+          Sign Out
         </Button>
       ) : null}
     </div>

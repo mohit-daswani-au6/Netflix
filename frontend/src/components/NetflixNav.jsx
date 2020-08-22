@@ -12,18 +12,21 @@ import {
 } from "reactstrap";
 import { connect } from "react-redux";
 import { logoutUser } from "../redux/actions/userActions";
+import { searchMovies } from "../redux/actions/movieAction";
 // import { NavItem, NavLink } from "reactstrap";
-const NetflixNav = ({ logoutUser, history, color }) => {
+const NetflixNav = ({ logoutUser, history, color, searchMovies }) => {
   const [show, handleShow] = useState();
-  const [searchBar, setSearchBar] = useState(false);
+  const [search, setSearch] = useState();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   const handleLogout = async () => {
     await logoutUser();
     history.push("/user/login");
   };
-  const handleSearchClick = () => {
-    setSearchBar(!searchBar);
+  const handleSearchChange = async (e) => {
+    console.log(e.target.value);
+    const response = await searchMovies(e.target.value);
+    console.log(response);
   };
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -35,10 +38,6 @@ const NetflixNav = ({ logoutUser, history, color }) => {
       // window.removeEventListener("scroll")
     };
   }, []);
-
-  const handleClick = async () => {
-    setSearchBar(!searchBar);
-  };
   return (
     <div className={`nav ${show && "nav_black"}`} style={{ background: color }}>
       <img
@@ -72,6 +71,9 @@ const NetflixNav = ({ logoutUser, history, color }) => {
         <input
           className="search-input"
           type="search"
+          value={search}
+          style={{ paddingLeft: "30px",color:"white"}}
+          onChange={handleSearchChange}
           placeholder="Enter Movie Name..."
         />
         <Dropdown
@@ -80,7 +82,7 @@ const NetflixNav = ({ logoutUser, history, color }) => {
           toggle={toggle}
         >
           <DropdownToggle
-            style={{ background: "black" }}
+            style={{ background: "transparent",border:"black" }}
             caret
           ></DropdownToggle>
           <DropdownMenu>
@@ -104,4 +106,6 @@ const NetflixNav = ({ logoutUser, history, color }) => {
   );
 };
 
-export default connect(null, { logoutUser })(withRouter(NetflixNav));
+export default connect(null, { logoutUser, searchMovies })(
+  withRouter(NetflixNav)
+);

@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import "../styles/registerPage.css";
 import { connect } from "react-redux";
+import Footer from "../components/Footer";
 import { ChangeforgotPassword } from "../redux/actions/userActions";
 import { Link, withRouter } from "react-router-dom";
 import NavBar from "../components/NavBar";
+import { Button } from "reactstrap";
 const ChangePasswordSchema = Yup.object().shape({
   password: Yup.string()
     .min(8, "password must be minimum length 0f 8!")
@@ -31,7 +34,9 @@ class ForgotPasswordChange extends Component {
     } else if (resp.statusCode === 201) {
       this.setState({ success: true });
       console.log(this.state.success);
-      this.props.history.push("/user/login");
+      setTimeout(() => {
+        this.props.history.push("/user/login");
+      }, 2000);
     }
     setTimeout(() => {
       this.setState({ error: "" });
@@ -39,39 +44,82 @@ class ForgotPasswordChange extends Component {
   };
 
   render() {
+    const extrastyle = {
+      background: "black",
+      margin: "0px",
+      padding: "0px 100px",
+      width: "100%",
+      color: "white",
+    };
     return (
-      <div>
-              <NavBar/>
+      <div className="pageLayout">
+        <NavBar />
+        {!this.state.success ? (
+          <div className="boxstyle" style={{ height: "350px" }}>
+            <h1 style={{ color: "white" }}>Change password</h1>
+            <br />
+            <br />
+            <Formik
+              initialValues={{
+                password: "",
+                cpassword: "",
+              }}
+              validationSchema={ChangePasswordSchema}
+              onSubmit={this.handleSubmit}
+            >
+              {({ errors, touched }) => (
+                <Form
+                  style={{
+                    display: "flex",
+                    color: "coral",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Field
+                    style={{ fontSize: "18px", padding: "10px" }}
+                    placeholder=" New password"
+                    name="password"
+                    type="password"
+                  />
+                  {errors.password && touched.password ? (
+                    <div>{errors.password}</div>
+                  ) : (
+                    <br />
+                  )}
+                  <Field
+                    style={{ fontSize: "18px", padding: "10px" }}
+                    placeholder=" Confirm password"
+                    name="cpassword"
+                    type="password"
+                  />
+                  {errors.password && touched.password ? (
+                    <div>{errors.password}</div>
+                  ) : (
+                    <br />
+                  )}
+                  <br />
+                  {this.state.error ? <p>{this.state.error}</p> : null}
 
-        <h1>Change password</h1>
-        <Formik
-          initialValues={{
-            password: "",
-            cpassword: "",
-          }}
-          validationSchema={ChangePasswordSchema}
-          onSubmit={this.handleSubmit}
-        >
-          {({ errors, touched }) => (
-            <Form style={{ display: "flex", flexDirection: "column" }}>
-              <h3>new password</h3>
-              <Field name="password" type="password" />
-              {errors.password && touched.password ? (
-                <div>{errors.password}</div>
-              ) : null}
-              <h3>confirm password</h3>
-              <Field name="cpassword" type="password" />
-              {errors.password && touched.password ? (
-                <div>{errors.password}</div>
-              ) : null}
-              <br />
-              {this.state.error ? <p>{this.state.error}</p> : null}
-
-              <button type="submit">Submit</button>
-            </Form>
-          )}
-        </Formik>
-        {this.state.success ? <h1>password successfully changed</h1> : null}
+                  <Button color="danger" type="submit">
+                    Submit
+                  </Button>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        ) : (
+          <h1
+            style={{
+              color: "white",
+              padding: "250px 0px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            Password successfully changed...Redirecting to login page
+          </h1>
+        )}
+        <Footer extrastyle={extrastyle} />
       </div>
     );
   }

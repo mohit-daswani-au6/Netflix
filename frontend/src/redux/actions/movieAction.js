@@ -4,6 +4,7 @@ import {
   MOVIE_DETAIL,
   TRENDING_MOVIES,
   TOP_RATED_MOVIES,
+  SEARCH_MOVIES
 } from "../actionTypes";
 export const getAllMovies = () => async (dispatch, getState) => {
   try {
@@ -13,7 +14,7 @@ export const getAllMovies = () => async (dispatch, getState) => {
     const { data } = await Axios(`http://localhost:5555/allMovies`, {
       headers: {
         Accept: "application/json",
-        Authorization:token
+        Authorization: token,
       },
     });
     console.log(data);
@@ -49,7 +50,10 @@ export const trendingMovies = () => async (dispatch, getState) => {
     console.log(err);
   }
 };
-export const topRatedMovies = (page=0,genre) => async (dispatch, getState) => {
+export const topRatedMovies = (page = 0, genre) => async (
+  dispatch,
+  getState
+) => {
   try {
     // const token = getState().userState.user.token;
     // console.log(token)
@@ -135,6 +139,28 @@ export const getMovieDetail = (MovieId) => async (dispatch, getState) => {
     });
     console.log(data);
     dispatch({ type: MOVIE_DETAIL, payload: data });
+    return data;
+  } catch (err) {
+    // alert("invalid credentials");
+    console.log(err);
+  }
+};
+export const searchMovies = (name) => async (dispatch, getState) => {
+  try {
+    // const token = getState().userState.user.token;
+    // console.log(token)
+    const userJSON = localStorage.getItem("user");
+    const user = JSON.parse(userJSON);
+    const token = user.token;
+    console.log(token);
+    const { data } = await Axios.get(`http://localhost:5555/search?value=${name}`, {
+      headers: {
+        Accept: "application/json",
+        Authorization: token,
+      },
+    });
+    console.log(data);
+    dispatch({ type: SEARCH_MOVIES, payload: data });
     return data;
   } catch (err) {
     // alert("invalid credentials");

@@ -6,54 +6,53 @@ const Footer = ({ extrastyle }) => {
   let style = null;
   extrastyle
     ? (style = {
+      margin: "50px",
         ...extrastyle,
-        margin: "50px",
       })
     : (style = {
         margin: "50px",
       });
-console.log(style)
   return (
     <div style={style}>
-      <hr />
       <br />
       <h2>Questions? Contact us.</h2>
       <br />
       <Row>
         <Col xs="2">
-          <Link style={{ color: "gray" }}>Audio and Subtitles</Link>
+          <Link to="#" style={{ color: "gray" }}>Audio and Subtitles</Link>
         </Col>
         <Col xs="2">
-          <Link style={{ color: "gray" }}>Help Center</Link>
+          <Link to="#" style={{ color: "gray" }}>Help Center</Link>
         </Col>
         <Col xs="2">
-          <Link style={{ color: "gray" }}>Gift Cards</Link>
+          <Link to="#" style={{ color: "gray" }}>Gift Cards</Link>
         </Col>
         <Col xs="2">
-          <Link style={{ color: "gray" }}>Invester Relations</Link>
+          <Link to="#" style={{ color: "gray" }}>Invester Relations</Link>
         </Col>
       </Row>
       <br />
       <Row>
         <Col xs="2">
-          <Link style={{ color: "gray" }}>Media Center</Link>
+          <Link to="#" style={{ color: "gray" }}>Media Center</Link>
         </Col>
         <Col xs="2">
-          <Link style={{ color: "gray" }}>Jobs</Link>
+          <Link to="#" style={{ color: "gray" }}>Jobs</Link>
         </Col>
         <Col xs="2">
-          <Link style={{ color: "gray" }}>Cookie Prefferences</Link>
+          <Link to="#" style={{ color: "gray" }}>Cookie Prefferences</Link>
         </Col>
         <Col xs="2">
-          <Link style={{ color: "gray" }}>Terms of use</Link>
+          <Link to="#" style={{ color: "gray" }}>Terms of use</Link>
         </Col>
       </Row>
       <br />
       <Row>
         <Col xs="2">
-          <Link style={{ color: "gray" }}>Privacy Statement</Link>
+          <Link to="#" style={{ color: "gray" }}>Privacy Statement</Link>
         </Col>
       </Row>
+      <br/>
     </div>
   );
 };

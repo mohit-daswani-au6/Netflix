@@ -8,7 +8,7 @@ class EmailVerificationPage extends Component {
   componentDidMount() {
     const token = this.props.match.params.token;
     const verfication = async (token) => {
-      const data = await Axios(`http://localhost:5555/user/verify/$${token}`);
+      const data = await Axios(`http://localhost:5555/user/verify/${token}`);
       console.log(data);
     };
     verfication(token);

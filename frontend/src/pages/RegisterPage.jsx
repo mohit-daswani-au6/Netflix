@@ -6,6 +6,7 @@ import { registerUser } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { Button } from "reactstrap";
+import Footer from "../components/Footer";
 const phoneRegExp = /^(\+\d{1,3}[- ]?)?\d{10}$/;
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
@@ -56,6 +57,12 @@ class RegisterPage extends Component {
   };
 
   render() {
+    const extrastyle={
+      background:"black",
+      margin:"0px",
+      padding:"0px 100px",
+      width:"100%",
+      color:"white"    }
     return (
       <div className="pageLayout">
         <NavBar />
@@ -133,7 +140,6 @@ class RegisterPage extends Component {
               )}
             </Formik>
             <br />
-            <br/>
             <p style={{color:"#cacaca"}}>
               Already a user? 
               <Link style={{fontSize:"17px",color:"white"}} to="/user/login"> Sign In</Link>
@@ -150,6 +156,7 @@ class RegisterPage extends Component {
             </button>
           </div>
         )}
+        <Footer extrastyle={extrastyle}/>
       </div>
     );
   }

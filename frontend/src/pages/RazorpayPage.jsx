@@ -4,6 +4,7 @@ import { razorpaySuccess } from "../redux/actions/subscriptionAction";
 import { withRouter } from "react-router-dom";
 import { Button, Container } from "reactstrap";
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 function loadScript(src) {
   return new Promise((resolve) => {
     const script = document.createElement("script");
@@ -92,6 +93,9 @@ const RazorpayPage = ({ razorpaySuccess, match, history }) => {
           <h1>Loading...</h1>
         )}
       </Container>
+      <br/>
+      <br/>
+      <Footer/>
     </>
   );
 };
