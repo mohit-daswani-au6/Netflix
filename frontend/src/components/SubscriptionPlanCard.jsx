@@ -10,7 +10,7 @@ import "../styles/planCard.css";
 
 const SubscriptionPlanCard = ({ item,handleClick }) => {
   return (
-        <Card key={item.type} className="pricingCard" body inverse color="danger">
+        <Card  className="pricingCard" body inverse color="danger">
           <CardBody>
             <CardTitle style={{ fontSize: "xx-large", fontWeight: "700" }}>
               {item.type}

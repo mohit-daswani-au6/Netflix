@@ -2,17 +2,23 @@ import React from "react";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 import { Container, Col, Row } from "reactstrap";
-import NavBar from "../components/NavBar";
 import NetflixNav from "../components/NetflixNav";
 import Footer from "../components/Footer";
 
 const AccountPage = () => {
   const userJSON = localStorage.getItem("user");
   const user = JSON.parse(userJSON);
+  console.log(user)
+  const extrastyle={
+    background:"white",
+    padding:"10px"
+  }
   return (
     <>
-      <NetflixNav color="black" />
-      <Container style={{marginTop: "100px"}}>
+          <NetflixNav color="black" />
+
+    <div style={{background:"white",marginTop:"50px"}}>
+      <Container style={{padding:"60px"}}>
         {user ? (
           <>
             <div>
@@ -28,6 +34,7 @@ const AccountPage = () => {
               </span>
             </div>
             <hr />
+          {/* {users? */}
             <Row>
               <Col xs="3">MEMBERSHIP & BILLING</Col>
               <Col xs="6">
@@ -49,12 +56,12 @@ const AccountPage = () => {
             </Row>
             <hr />
             <Row>
-              <Col xs="3">MEMBERSHIP & BILLING</Col>
+              <Col xs="3">PLAN DETAILS</Col>
               <Col xs="6">
                 <h2>Premium </h2> <h4>Monthly</h4>
               </Col>
               <Col xs="3">
-                <Link to="#"> Change Plan</Link>
+                <Link to="/subscriptionPlans"> Change Plan</Link>
               </Col>
             </Row>
           </>
@@ -62,12 +69,13 @@ const AccountPage = () => {
           <Redirect to="/user/login" />
         )}
       </Container>
-      <Footer/>
+      <Footer extrastyle={extrastyle}/>
+    </div>
     </>
   );
 };
-// const mapStateToProps = (state) => ({
-//   user: state.userState.user,
-// });
+const mapStateToProps = (state) => ({
+  users: state.userState.user,
+});
 
-export default connect(null)(AccountPage);
+export default connect(mapStateToProps)(AccountPage);

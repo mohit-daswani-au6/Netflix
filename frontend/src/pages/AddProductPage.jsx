@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { addMovie } from "../redux/actions/adminAction";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
+import NavBar from "../components/NavBar";
 class AddProductPage extends Component {
   state = {
     response: false,
@@ -69,202 +70,216 @@ class AddProductPage extends Component {
   };
 
   render() {
+    const style={
+      background:"black",
+      height:"70px"
+    }
+    const admin = localStorage.getItem("admin");
     return (
-      <div>
-        <h2>Name</h2>
-        <input
-          onChange={this.handleChange}
-          value={this.state.MovieName}
-          type="text"
-          name="MovieName"
-          // required
-        />
-        <h2>Title</h2>
-        <input
-          onChange={this.handleChange}
-          value={this.state.title}
-          type="text"
-          name="title"
-          // required
-        />
-        <h2>description</h2>
-        <textarea
-          onChange={this.handleChange}
-          value={this.state.description}
-          name="description"
-          // required
-          rows="4"
-          cols="50"
-        ></textarea>
-        <br />
-        <label className="mr-sm-2" htmlFor="inlineFormCustomSelect">
-          languages
-        </label>
-        <select
-          onChange={this.handleChange}
-          value={this.state.language}
-          className="custom-select mr-sm-2"
-          name="language"
-          // required
-          id="inlineFormCustomSelect"
-        >
-          <option defaultValue>Choose...</option>
-          <option value="english">English</option>
-          <option value="hindi">Hindi</option>
-          <option value="chhattisgarhi">Chhattisgarhi</option>
-        </select>
-        <h2>poster image</h2>
-        <input
-          onChange={this.handleChange}
-          // value={this.state.posterImage}
-          type="file"
-          // required
-          // type="text"
-          name="posterImage"
-        />
-        <h2>background image</h2>
-        <input
-          onChange={this.handleChange}
-          // value={this.state.posterImage}
-          type="file"
-          // required
-          // type="text"
-          name="backgroundImage"
-        />
-        <div>
-          <input
-            onChange={this.handleChange}
-            value={this.state.isReleased}
-            type="checkbox"
-            name="isReleased"
-          />
-          <label htmlFor="isReleased">isReleased</label>
-        </div>
-        <h2>movie</h2>
-        <input
-          onChange={this.handleChange}
-          // value={this.state.movie}
-          type="file"
-          // type="text"
-          // required
-          name="movie"
-        />
-        <h2>date</h2>
-        <input
-          onChange={this.handleChange}
-          value={this.state.releasedDate}
-          type="date"
-          id="start"
-          // required
-          name="releasedDate"
-          min="2018-01-01"
-          max="2021-12-31"
-        />
-        <div>
-          <input
-            onChange={this.handleChange}
-            value={this.state.isAdult}
-            type="checkbox"
-            name="isAdult"
-          />
-          <label htmlFor="isAdult">isAdult</label>
-        </div>
-        <div>
-          <input
-            onChange={this.handleChange}
-            value={this.state.isPaid}
-            type="checkbox"
-            name="isPaid"
-          />
-          <label htmlFor="isPaid">isPaid</label>
-        </div>
-        <h2>rating</h2>
-        <input
-          onChange={this.handleChange}
-          value={this.state.rating}
-          type="number"
-          // required
-          name="rating"
-          required
-        />
-        <h2>runTime</h2>
-        <input
-          onChange={this.handleChange}
-          value={this.state.runTime}
-          type="number"
-          name="runTime"
-          // required
-        />
-        <h2>country</h2>
-        <input
-          onChange={this.handleChange}
-          value={this.state.country}
-          type="text"
-          name="country"
-          // required
-        />
-        <br />
-        <div style={{ display: "flex" }}>
-          <label className="mr-sm-2" htmlFor="inlineFormCustomSelect">
-            genre
-          </label>
-          <div>
-            <input
+      <>
+        <NavBar extrastyle={style} />
+
+        {admin ? (
+          <div style={{ margin: "60px", color: "white" }}>
+            <h2>Name</h2>
+            <input 
               onChange={this.handleChange}
-              value={this.state.Action}
-              type="checkbox"
-              name="Action"
+              value={this.state.MovieName}
+              type="text"
+              name="MovieName"
+              // required
             />
-            <label htmlFor="Action">Action</label>
-          </div>
-          <div>
-            <input
+            <h2>Title</h2>
+            <input 
               onChange={this.handleChange}
-              value={this.state.Adventure}
-              type="checkbox"
-              name="Adventure"
+              value={this.state.title}
+              type="text"
+              name="title"
+              // required
             />
-            <label htmlFor="Adventure">Adventure</label>
-          </div>
-          <div>
-            <input
+            <h2>description</h2>
+            <textarea
               onChange={this.handleChange}
-              value={this.state.Comedy}
-              type="checkbox"
-              name="Comedy"
-            />
-            <label htmlFor="Comedy">Comedy</label>
-          </div>
-          <div>
-            <input
+              value={this.state.description}
+              name="description"
+              // required
+              rows="4"
+              cols="50"
+            ></textarea>
+            <br />
+            <label className="mr-sm-2" htmlFor="inlineFormCustomSelect">
+              languages
+            </label>
+            <select
               onChange={this.handleChange}
-              value={this.state.Drama}
-              type="checkbox"
-              name="Drama"
-            />
-            <label htmlFor="Drama">Drama</label>
-          </div>
-          <div>
-            <input
+              value={this.state.language}
+              className="custom-select mr-sm-2"
+              name="language"
+              // required
+              id="inlineFormCustomSelect"
+            >
+              <option defaultValue>Choose...</option>
+              <option value="english">English</option>
+              <option value="hindi">Hindi</option>
+              <option value="chhattisgarhi">Chhattisgarhi</option>
+            </select>
+            <h2>poster image</h2>
+            <input style={{height:"25px"}}
               onChange={this.handleChange}
-              value={this.state.Horror}
-              type="checkbox"
-              name="Horror"
+              // value={this.state.posterImage}
+              type="file"
+              // required
+              // type="text"
+              name="posterImage"
             />
-            <label htmlFor="Horror">Horror</label>
-          </div>
-          <div>
-            <input
+            <h2>background image</h2>
+            <input style={{height:"25px"}}
               onChange={this.handleChange}
-              value={this.state.Thriller}
-              type="checkbox"
-              name="Thriller"
+              
+              // value={this.state.posterImage}
+              type="file"
+              // required
+              // type="text"
+              name="backgroundImage"
             />
-            <label htmlFor="Thriller">Thriller</label>
+            <div>
+              <input 
+                onChange={this.handleChange}
+                value={this.state.isReleased}
+                type="checkbox"
+                name="isReleased"
+              />
+              <label htmlFor="isReleased">isReleased</label>
+            </div>
+            <h2>movie</h2>
+            <input style={{height:"25px"}}
+              onChange={this.handleChange}
+              // value={this.state.movie}
+              type="file"
+              // type="text"
+              // required
+              name="movie"
+            />
+            <h2>date</h2>
+            <input 
+              onChange={this.handleChange}
+              value={this.state.releasedDate}
+              type="date"
+              id="start"
+              // required
+              name="releasedDate"
+              min="2018-01-01"
+              max="2021-12-31"
+            />
+            <div>
+              <input 
+                onChange={this.handleChange}
+                value={this.state.isAdult}
+                type="checkbox"
+                name="isAdult"
+              />
+              <label htmlFor="isAdult">isAdult</label>
+            </div>
+            <div>
+              <input 
+                onChange={this.handleChange}
+                value={this.state.isPaid}
+                type="checkbox"
+                name="isPaid"
+              />
+              <label htmlFor="isPaid">isPaid</label>
+            </div>
+            <h2>rating</h2>
+            <input 
+              onChange={this.handleChange}
+              value={this.state.rating}
+              type="number"
+              // required
+              name="rating"
+              // required
+            />
+            <h2>runTime</h2>
+            <input 
+              onChange={this.handleChange}
+              value={this.state.runTime}
+              type="number"
+              name="runTime"
+              // required
+            />
+            <h2>country</h2>
+            <input 
+              onChange={this.handleChange}
+              value={this.state.country}
+              type="text"
+              name="country"
+              // required
+            />
+            <br />
+            <div style={{ display: "flex" }}>
+              <label className="mr-sm-2" htmlFor="inlineFormCustomSelect">
+                genre
+              </label>
+              <div>
+                <input 
+                  onChange={this.handleChange}
+                  value={this.state.Action}
+                  type="checkbox"
+                  name="Action"
+                />
+                <label htmlFor="Action">Action</label>
+              </div>
+              <div>
+                <input 
+                  onChange={this.handleChange}
+                  value={this.state.Adventure}
+                  type="checkbox"
+                  name="Adventure"
+                />
+                <label htmlFor="Adventure">Adventure</label>
+              </div>
+              <div>
+                <input 
+                  onChange={this.handleChange}
+                  value={this.state.Comedy}
+                  type="checkbox"
+                  name="Comedy"
+                />
+                <label htmlFor="Comedy">Comedy</label>
+              </div>
+              <div>
+                <input 
+                  onChange={this.handleChange}
+                  value={this.state.Drama}
+                  type="checkbox"
+                  name="Drama"
+                />
+                <label htmlFor="Drama">Drama</label>
+              </div>
+              <div>
+                <input 
+                  onChange={this.handleChange}
+                  value={this.state.Horror}
+                  type="checkbox"
+                  name="Horror"
+                />
+                <label htmlFor="Horror">Horror</label>
+              </div>
+              <div>
+                <input 
+                  onChange={this.handleChange}
+                  value={this.state.Thriller}
+                  type="checkbox"
+                  name="Thriller"
+                />
+                <label htmlFor="Thriller">Thriller</label>
+              </div>
+            </div>
+            <input  type="submit" onClick={this.handleSubmit} value="submit" />
           </div>
-        </div>
-        <input type="submit" onClick={this.handleSubmit} value="submit" />
-      </div>
+        ) : (
+          <Redirect to="/admin/login" />
+        )}
+      </>
     );
   }
 }

@@ -39,16 +39,12 @@ class RegisterPage extends Component {
     const { email, password, name, phoneNo } = data;
     this.setState({ name: name });
     const obj = { name, email, password, phoneNo };
-    console.log(obj);
     const response = await this.props.registerUser(obj);
     if (response.statusCode === 201) {
       this.setState({ emailVerificaionPage: true });
-      localStorage.setItem("user", response.newUser);
     } else if (response.error.hasOwnProperty("email")) {
-      console.log(response.error.email);
       this.setState({ error: { email: response.error.email } });
     } else if (response.error.hasOwnProperty("phoneNo")) {
-      console.log(response.error.phoneNo);
       this.setState({ error: { phoneNo: response.error.phoneNo } });
     }
     setTimeout(() => {
@@ -57,12 +53,13 @@ class RegisterPage extends Component {
   };
 
   render() {
-    const extrastyle={
-      background:"black",
-      margin:"0px",
-      padding:"0px 100px",
-      width:"100%",
-      color:"white"    }
+    const extrastyle = {
+      background: "black",
+      margin: "0px",
+      padding: "0px 100px",
+      width: "100%",
+      color: "white",
+    };
     return (
       <div className="pageLayout">
         <NavBar />
@@ -91,39 +88,45 @@ class RegisterPage extends Component {
                   <Field
                     className="input"
                     placeholder="Name"
-                    style={{ fontSize: "18px", padding: "10px", marginTop:"15px"
- }}
+                    style={{
+                      fontSize: "18px",
+                      padding: "10px",
+                      marginTop: "15px",
+                    }}
                     name="name"
                   />
-                  {errors.name && touched.name ? <p>{errors.name}</p> : <br/>}
+                  {errors.name && touched.name ? <p>{errors.name}</p> : <br />}
                   <Field
                     className="input"
                     placeholder="Email"
-                    style={{ fontSize: "18px", padding: "10px", 
- }}
+                    style={{ fontSize: "18px", padding: "10px" }}
                     name="email"
                     type="email"
                   />
                   {this.state.error.email ? (
                     <p>{this.state.error.email}</p>
                   ) : null}
-                  {errors.email && touched.email ? <p>{errors.email}</p> : <br/>}
+                  {errors.email && touched.email ? (
+                    <p>{errors.email}</p>
+                  ) : (
+                    <br />
+                  )}
                   <Field
                     className="input"
                     placeholder="Password"
-                    style={{ fontSize: "18px", padding: "10px", 
- }}
+                    style={{ fontSize: "18px", padding: "10px" }}
                     name="password"
                     type="password"
                   />
                   {errors.password && touched.password ? (
                     <p>{errors.password}</p>
-                  ) : <br/>}
+                  ) : (
+                    <br />
+                  )}
                   <Field
                     className="input"
                     placeholder="Phone number"
-                    style={{ fontSize: "18px", padding: "10px", 
- }}
+                    style={{ fontSize: "18px", padding: "10px" }}
                     name="phoneNo"
                     type="number"
                   />
@@ -133,30 +136,48 @@ class RegisterPage extends Component {
 
                   {errors.phoneNo && touched.phoneNo ? (
                     <p>{errors.phoneNo}</p>
-                  ) : <br/>}
+                  ) : (
+                    <br />
+                  )}
                   <br />
-                  <Button size="lg" color="danger" type="submit">Submit</Button>
+                  <Button size="lg" color="danger" type="submit">
+                    Submit
+                  </Button>
                 </Form>
               )}
             </Formik>
             <br />
-            <p style={{color:"#cacaca"}}>
-              Already a user? 
-              <Link style={{fontSize:"17px",color:"white"}} to="/user/login"> Sign In</Link>
+            <p style={{ color: "#cacaca" }}>
+              Already a user?
+              <Link
+                style={{ fontSize: "17px", color: "white" }}
+                to="/user/login"
+              >
+                {" "}
+                Sign In
+              </Link>
             </p>
           </div>
         ) : (
-          <div>
+          <div
+            style={{
+              color: "white",
+              padding: "250px 0px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             <h1>
               Hi {this.state.name}, Kindly verify your email first then login
               again
             </h1>
-            <button>
-              <a href="/user/login">Login</a>
-            </button>
+            <Button color="danger" style={{ width: "100px", fontSize: "15px" }}>
+              <Link to="/user/login">Sign In</Link>
+            </Button>
           </div>
         )}
-        <Footer extrastyle={extrastyle}/>
+        <Footer extrastyle={extrastyle} />
       </div>
     );
   }

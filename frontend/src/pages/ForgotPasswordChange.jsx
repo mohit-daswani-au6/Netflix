@@ -5,7 +5,7 @@ import "../styles/registerPage.css";
 import { connect } from "react-redux";
 import Footer from "../components/Footer";
 import { ChangeforgotPassword } from "../redux/actions/userActions";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import { Button } from "reactstrap";
 const ChangePasswordSchema = Yup.object().shape({

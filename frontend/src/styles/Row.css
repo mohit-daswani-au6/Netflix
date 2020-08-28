@@ -1,6 +1,7 @@
 .row1 {
   color: white;
   margin-left: 20px;
+  margin-bottom:30px;
 }
 .row_posters {
   display: flex;
@@ -22,22 +23,54 @@
   backface-visibility: hidden;
 }
 .container:hover .row_poster {
-  transform: scale(1.08);
+  transform: scale(1.25);
   opacity: 0.2;
 }
 .container:hover .addToWatchlist {
   opacity: 1;
+  transition: all 800ms;
+
+  
+}
+.container:hover .popup {
+  opacity: 1;
+  transition: all 800ms;
+
+}
+.popup {
+  position: relative;
+  left: 140px;
+  background-color: transparent;
+  background-image: url("https://cliffsliving.com/wp-content/themes/thecliffs/images/arrow-down-white.png");
+  background-size: 60px;
+  background-position: -8px 0px;
+  height: 40px;
+  width: 50px;
+  border-radius: 50%;
+  border: transparent;
+  background-repeat: no-repeat;
+  padding: 0px 15px 0px 15px;
+  -webkit-transition: width 0.4s;
+  transition: 0.5s ease;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+.title{
+  opacity: 0;
 }
 .addToWatchlist {
   position: relative;
-  left: 240px;
+  left: 210px;
+  border: transparent;
   bottom: 50px;
   background-color: white;
   background-image: url("https://icons-for-free.com/iconfiles/png/512/add+photo+instagram+upload+icon-1320184027593509107.png");
   background-size: 70px;
-  background-position: -17px -17px;
-  height: 40px;
-  width: 40px;
+  background-position: -17px -18px;
+  height: 35px;
+  width: 35px;
   border-radius: 50%;
   background-repeat: no-repeat;
   padding: 0px 15px 0px 15px;
@@ -50,17 +83,24 @@
 }
 .container:hover .removeMylist {
   opacity: 1;
+  background-color: red;
+}
+.container:hover .title {
+  opacity: 1;
+  transition: all 800ms;
+
 }
 .removeMylist {
   position: relative;
-  left: 285px;
+  left: 255px;
   bottom: 50px;
   height: 40px;
+  border:transparent;
   width: 40px;
-  background-color: white;
+  background-color: darkgray;
   background-image: url("https://image.flaticon.com/icons/png/512/87/87932.png");
   background-size: 40px;
-  background-position: -3px -3px;
+  /* background-position: -3px -3px; */
   border-radius: 50%;
   background-repeat: no-repeat;
   padding: 0px 15px 0px 15px;
@@ -78,9 +118,36 @@
 .row_posterLarge:hover {
   transform: scale(1.09);
 }
-.shortrow{
+/* .shortrow {
   position: relative;
-    left: -20px;
-    top: 75px;
+  left: -35px;
+  top: 75px;
 }
-
+.shortrowDetail {
+  position: relative;
+  left: -160px;
+  top: 120px;
+} */
+.swiper-button-prev {
+  color: #fff !important;
+}
+.swiper-button-next {
+  color: #fff !important;
+}
+.swiper-container{
+  width: 100%;
+}
+.swiper-wrapper {
+  width: 50%;
+}
+.swiper-slide {
+  text-align: center;
+  width: auto;
+}
+.slide-image {
+  height: 400px;
+  width: auto;
+}
+.my-gallery figure {
+  margin: 0px;
+}

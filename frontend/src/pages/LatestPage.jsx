@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import Row from "../components/Row";
-import { getWatchlist } from "../redux/actions/watchlistAction";
 import { connect } from "react-redux";
 import "../styles/listPage.css";
 import NetflixNav from "../components/NetflixNav";
 import Footer from "../components/Footer";
-const MylistPage = ({ getWatchlist }) => {
+import { latestMovies } from "../redux/actions/movieAction";
+const LatestPage = ({ latestMovies }) => {
 const extrastyle={
   margin: "20px",
-  background: "black",
-  padding: "0 100px",
-  color:"white",
-  width:"100%"
+    background: "black",
+    padding: "0 100px",
+    color:"white",
+    width:"100%"
 }
   return (
     <>
@@ -25,7 +25,7 @@ const extrastyle={
         paddingTop:"50px"
       }}
     >
-      <Row title="My list"moviesURL={getWatchlist} list="true" />
+      <Row title="Latest "moviesURL={latestMovies}  />
     </div>
     </div>
     <Footer extrastyle={extrastyle}/>
@@ -33,4 +33,4 @@ const extrastyle={
   );
 };
 
-export default connect(null, { getWatchlist })(MylistPage);
+export default connect(null, { latestMovies })(LatestPage);

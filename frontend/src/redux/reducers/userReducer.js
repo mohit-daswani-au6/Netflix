@@ -7,6 +7,7 @@ const {
   CHANGE_PASSWORD,
   CHANGE_PHONE_NUMBER,
   CHANGE_EMAIL,
+  FACEBOOK_LOGIN,
 } = require("../actionTypes");
 
 const initialState = {
@@ -20,7 +21,6 @@ const userReducer = (state = initialState, actions) => {
       if (payload.error) {
         return { ...state, error: payload };
       } else {
-        localStorage.setItem("user", JSON.stringify(payload));
         return { ...state, user: payload };
       }
     case LOGIN_USER:
@@ -34,6 +34,10 @@ const userReducer = (state = initialState, actions) => {
       if (payload.error) {
         return { ...state, error: payload };
       } else return { ...state, user: payload };
+      case FACEBOOK_LOGIN:
+        if (payload.error) {
+          return { ...state, error: payload };
+        } else return { ...state, user: payload };
     case CHANGE_PASSWORD:
       if (payload.error) {
         return { ...state, error: payload };

@@ -8,14 +8,23 @@ class EmailVerificationPage extends Component {
   componentDidMount() {
     const token = this.props.match.params.token;
     const verfication = async (token) => {
-      const data = await Axios(`http://localhost:5555/user/verify/${token}`);
-      console.log(data);
+      const { data } = await Axios(
+        `https://powerful-temple-56540.herokuapp.com/user/verify/${token}`
+      );
+      if (data === "email verified") {
+        this.props.history.push("/user/login");
+      }
     };
     verfication(token);
   }
 
   render() {
-    return <div>hi there</div>;
+    return (
+      <div>
+        <h1>Email Verified..yipeee</h1>
+        <h4>redirecting...</h4>
+      </div>
+    );
   }
 }
 

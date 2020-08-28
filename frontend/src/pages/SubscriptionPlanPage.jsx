@@ -27,13 +27,16 @@ class SubscriptionPlanPage extends Component {
     e.preventDefault();
     if (e.target.value === "Annually") {
       const response = await this.props.getSubscription(this.state.items[1]);
+      if(response.hasOwnProperty("order")){
       this.props.history.push(`/razorpay/${response.order.order_id}`)
-    }
+    }}
     else{
       const response = await this.props.getSubscription(this.state.items[0]);
-      this.props.history.push(`/razorpay/${response.order.order_id}`)
-    }
+      if(response.hasOwnProperty("order")){
+        this.props.history.push(`/razorpay/${response.order.order_id}`)
+          }
   };
+}
   render() {
     const userJSON = localStorage.getItem("user");
     const user = JSON.parse(userJSON);
@@ -44,16 +47,16 @@ class SubscriptionPlanPage extends Component {
       background: "#e5e5e5"
     }
     return (
-      <div>
+      <div style={{background:"white"}}>
       {user?
       <>
       <NavBar/>
-      <Container style={{ textAlign: "center", marginTop: "70px" }}>
+      <Container style={{ textAlign: "center", padding: "50px" }}>
         <h1>Plans & Pricing</h1>
         <br />
         <CardDeck>
           {this.state.items.map((item) => (
-            <SubscriptionPlanCard handleClick={this.handleClick} item={item} />
+            <SubscriptionPlanCard key={item.type} handleClick={this.handleClick} item={item} />
           ))}
         </CardDeck>
       </Container>

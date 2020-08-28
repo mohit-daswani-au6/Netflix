@@ -1,55 +1,58 @@
-import React, { Component } from "react";
-import { withRouter, Redirect } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { withRouter, Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import ReactPlayer from "react-player";
 import "../styles/videoplayer.css";
 import { getMovieDetail } from "../redux/actions/movieAction";
-export class MoviePlayerPage extends Component {
-  state = {
-    movie: "",
-    error: "",
-  };
-  componentDidMount() {
+const MoviePlayerPage = ({ getMovieDetail, match }) => {
+  const [movie, setmovie] = useState();
+  const [error, seterror] = useState();
+  const { MovieId } = match.params;
+
+  useEffect(() => {
     const fetchMovieDetail = async () => {
-      const { MovieId } = this.props.match.params;
-      const response = await this.props.getMovieDetail(MovieId);
+      const response = await getMovieDetail(MovieId);
       console.log(response);
       if (response.statusCode === 201) {
-        await this.setState({ movie: response.movie });
+        await setmovie(response.movie);
       } else {
-        this.setState({ error: response.error });
+        seterror(response.error);
       }
     };
     fetchMovieDetail();
-  }
-  render() {
-    return (
-      <>
-      {!this.state.error?
-      <div className="videopage">
-        {this.state.movie ? (
-          <video
-            onContextMenu={(e) => {
-              e.preventDefault();
-              return false;
-            }}
-            controlsList="nodownload"
-            preload="auto"
-            tabIndex="-1"
-            className="video"
-            controls
-          >
-            <source
-              src={`https://${this.state.movie.movie}`}
-              type="video/mp4"
-            />
-            <source src="movie.ogg" type="video/ogg" />
-          </video>
-        ) : null}
-      </div>:<Redirect to="/subscriptionPlans"/>}
-      </>
-    );
-  }
-}
+  }, [MovieId]);
+
+  const history = useHistory();
+  return (
+    <>
+      {!error ? (
+        <div className="videopage">
+          {movie ? (
+            <video
+              style={{ outline: "none" }}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                return false;
+              }}
+              controlsList="nodownload"
+              preload="auto"
+              tabIndex="-1"
+              className="video"
+              controls
+              autoPlay
+            >
+              <source src={`https://${movie.movie}`} type="video/mp4" />
+              <source src="movie.ogg" type="video/ogg" />
+            </video>
+          ) : null}
+          <button className="back_button" onClick={() => history.goBack()}>
+            x
+          </button>
+        </div>
+      ) : (
+        <Redirect to="/subscriptionPlans" />
+      )}
+    </>
+  );
+};
 
 export default connect(null, { getMovieDetail })(withRouter(MoviePlayerPage));

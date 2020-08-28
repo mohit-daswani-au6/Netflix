@@ -21,8 +21,10 @@ function loadScript(src) {
 
 const RazorpayPage = ({ razorpaySuccess, match, history }) => {
   const [OrderId, setOrderId] = useState();
+  const [Success, setSuccess] = useState(false);
   useEffect(() => {
     const data = async () => {
+       // eslint-disable-next-line 
       const { orderId } = match.params;
       setOrderId(orderId);
     };
@@ -46,7 +48,12 @@ const RazorpayPage = ({ razorpaySuccess, match, history }) => {
       order_id: OrderId,
       handler: async function (response) {
         const res = await razorpaySuccess(response);
-        console.log(res);
+        if (res.statusCode === 200) {
+          setSuccess(true);
+          setTimeout(() => {
+            history.push("/")
+          }, 2000);
+        }
       },
       prefill: {
         name: user.name,
@@ -60,11 +67,15 @@ const RazorpayPage = ({ razorpaySuccess, match, history }) => {
     var paymentObj = new window.Razorpay(options);
     paymentObj.open();
   };
+  const extrastyle={
+    padding:"120px",
+    margin:"0px"
+  }
   return (
-    <>
+    <div style={{background:"white"}}>
       <NavBar />
       <Container
-        style={{ marginTop: "70px", textAlign: "center", width: "285px" }}
+        style={{ paddingTop:"80px", textAlign: "center", width: "285px" }}
       >
         {user ? (
           <>
@@ -84,19 +95,23 @@ const RazorpayPage = ({ razorpaySuccess, match, history }) => {
               <br />
               <b>Cancel online anytime</b>
             </p>
-
-            <Button color="success" onClick={displayRazorpay}>
-              Process Payment
-            </Button>
+            {Success ? (
+              <h4>Payment Successfully made</h4>
+            ) : (
+              <Button color="success" onClick={displayRazorpay}>
+                Process Payment
+              </Button>
+            )}
+            <br />
+            <br />
           </>
         ) : (
           <h1>Loading...</h1>
         )}
       </Container>
-      <br/>
-      <br/>
-      <Footer/>
-    </>
+
+      <Footer extrastyle={extrastyle} />
+    </div>
   );
 };
 // const mapStateToProps = (state) => ({

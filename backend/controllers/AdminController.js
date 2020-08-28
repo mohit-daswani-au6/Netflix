@@ -60,7 +60,7 @@ module.exports = {
   delete1: {
     async logout_admin(req, res) {
       try {
-        token = req.params.adminToken;
+        token = req.header("Authorization");
         const admin = await admins.nullify_admin_Token(token);
         res.json(admin);
       } catch (err) {

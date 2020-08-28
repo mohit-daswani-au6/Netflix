@@ -1,5 +1,5 @@
 const users = require("../models/user");
-const email1 = require("../utils/nodeMailer");
+const email1 = require("../utils/nodemailer");
 const { verify } = require("jsonwebtoken");
 const { hash } = require("bcryptjs");
 const { validationResult } = require("express-validator");
@@ -64,8 +64,8 @@ module.exports = {
           let subject = `Welcome to Netflix`;
           let html = `<h2>Thanks for Joining Us</h2>
                         <h3>Dear ${name} you are one step closer to become one of our prestigious family</h3>
-                        <p>To verify your email Click <a href=http://localhost:5555/user/verify/${token} >here</a></p>
-                        <p>http://localhost:5555/user/verify/${token}</p>           
+                        <p>To verify your email Click <a href=https://netflix-by-mohit.netlify.app/user/verify/${token} >here</a></p>
+                        <p>https://netflix-by-mohit.netlify.app/user/verify/${token}</p>           
                                   <p>Thank you!!!!</p>`;
 
           email1(email, subject, html); //////////////////////function to send email to the user
@@ -114,8 +114,8 @@ module.exports = {
                            display: inline-block;
                            font-size: 16px;
                            margin: 4px 2px;
-                           cursor: pointer;"><a href=http://localhost:3000/user/forgot_password/${resetToken}>Reset My Password</a></button>
-                           <p>copy paste this link to your browser:- http://localhost:3000/user/forgot_password/${resetToken}</p> 
+                           cursor: pointer;"><a href=https://netflix-by-mohit.netlify.app/user/forgot_password/${resetToken}>Reset My Password</a></button>
+                           <p>copy paste this link to your browser:- https://netflix-by-mohit.netlify.app/user/forgot_password/${resetToken}</p> 
                            <p style="color:red;">If you did not forgot your password you can safely ignore this email.</p>
                            <p>Thank you</p>`;
             email1(user[0].email, subject, html);
@@ -175,16 +175,17 @@ module.exports = {
         if (password === "Invalid Credentials") {
           res.json({ status: "failed", error: "Bad request" });
         } else {
+          console.log(newpassword,cpassword)
           if (newpassword === cpassword) {
             const hashedpassword = await hash(newpassword, 10);
-            const resetPassword = await users.updateOne(
+            const resetPassword = await users.findOneAndUpdate(
               { token: user.token },
               { password: hashedpassword },
               { new: true }
             );
             res.status(200).json({
               statusCode: 201,
-              message: "password changed successfully",
+              user:resetPassword
             });
           } else {
             res.json({ status: "failed", error: "Password doesn't match" });
@@ -209,14 +210,14 @@ module.exports = {
         const checkPassword = await users.findByPasswordToChangeEmailAndPhoneNo(user, password);
         if (checkPassword === "Invalid Credentials")
           return res.json({ status: "failed", error: "Bad request" });
-        const resetEmail = await users.updateOne(
+        const resetEmail = await users.findOneAndUpdate(
           { token: user.token },
           { email: email },
           { new: true }
         );
         res.status(200).json({
           statusCode: 201,
-          message: "Email changed successfully",
+         user:resetEmail
         });
       } catch (err) {
         console.log(err);
@@ -237,14 +238,15 @@ module.exports = {
         const checkPassword = await users.findByPasswordToChangeEmailAndPhoneNo(user, password);
         if (checkPassword === "Invalid Credentials")
           return res.json({ status: "failed", error: "Bad request" });
-        const resetPhoneNo = await users.updateOne(
+        const resetPhoneNo = await users.findOneAndUpdate(
           { token: user.token },
           { phoneNo: newPhoneNo },
           { new: true }
         );
+        console.log(resetPhoneNo)
         res.status(200).json({
           statusCode: 201,
-          message: "phone number changed successfully",
+          user:resetPhoneNo
         });
       } catch (err) {
         console.log(err);

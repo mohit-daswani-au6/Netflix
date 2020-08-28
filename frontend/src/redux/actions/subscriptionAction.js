@@ -2,12 +2,11 @@ import Axios from "axios";
 import { GET_SUBSCRIBTION, RAZORPAY_SUCCESS } from "../actionTypes";
 export const getSubscription = (data1) => async (dispatch, getState) => {
   try {
-    console.log(data1);
     const userJSON = localStorage.getItem("user");
     const user = JSON.parse(userJSON);
-    const token = user.token;
+    const token = user.user.token;
     const { data } = await Axios.post(
-      `http://localhost:5555/user/subscription`,
+      `https://powerful-temple-56540.herokuapp.com/user/subscription`,
       data1,
       {
         headers: {
@@ -16,7 +15,6 @@ export const getSubscription = (data1) => async (dispatch, getState) => {
         },
       }
     );
-    console.log(data);
     dispatch({ type: GET_SUBSCRIBTION, payload: data });
     return data;
   } catch (err) {
@@ -26,12 +24,11 @@ export const getSubscription = (data1) => async (dispatch, getState) => {
 };
 export const getPayment = (data1) => async (dispatch, getState) => {
   try {
-    console.log(data1);
     const userJSON = localStorage.getItem("user");
     const user = JSON.parse(userJSON);
-    const token = user.token;
+    const token = user.user.token;
     const { data } = await Axios.post(
-      `http://localhost:5555/user/subscription`,
+      `https://powerful-temple-56540.herokuapp.com/user/subscription`,
       data1,
       {
         headers: {
@@ -40,7 +37,6 @@ export const getPayment = (data1) => async (dispatch, getState) => {
         },
       }
     );
-    console.log(data);
     dispatch({ type: GET_SUBSCRIBTION, payload: data });
     return data;
   } catch (err) {
@@ -50,12 +46,11 @@ export const getPayment = (data1) => async (dispatch, getState) => {
 };
 export const razorpaySuccess = (data1) => async (dispatch, getState) => {
   try {
-    console.log(data1);
     const userJSON = localStorage.getItem("user");
     const user = JSON.parse(userJSON);
-    const token = user.token;
+    const token = user.user.token;
     const { data } = await Axios.post(
-      `http://localhost:5555/success`,
+      `https://powerful-temple-56540.herokuapp.com/success`,
       data1,
       {
         headers: {
@@ -64,7 +59,6 @@ export const razorpaySuccess = (data1) => async (dispatch, getState) => {
         },
       }
     );
-    console.log(data);
     dispatch({ type: RAZORPAY_SUCCESS, payload: data });
     return data;
   } catch (err) {

@@ -4,26 +4,50 @@ import "../styles/netflixNav.css";
 import { logoutUser } from "../redux/actions/userActions";
 import { NavLink, withRouter } from "react-router-dom";
 import { Button } from "reactstrap";
-const NavBar = ({ logoutUser, history }) => {
+import { logoutAdmin } from "../redux/actions/adminAction";
+const NavBar = ({ logoutUser,logoutAdmin, history,extrastyle }) => {
   const handleLogout = async () => {
+    if(admin) {
+          await logoutAdmin();
+          localStorage.removeItem("admin")
+    history.push("/admin/login");
+    }
+    else{
     await logoutUser();
     history.push("/user/login");
-  };
-  let user=null;
+  }};
+  let user = null;
   if (localStorage.getItem("user")) {
-    const userJSON = localStorage.getItem("user");
-    user = JSON.parse(userJSON);
+    if (localStorage.getItem("user") !== undefined) {
+      const userJSON = localStorage.getItem("user");
+      user = JSON.parse(userJSON);
+    }
+  }
+  let admin = null
+  if (localStorage.getItem("admin")) {
+    if (localStorage.getItem("admin") !== undefined) {
+       admin = localStorage.getItem("admin");
+    }
   }
   return (
-    <div className={`nav`} style={{display:"flex",justifyContent:"flex-end"}}>
-      <img 
-        style={{width:"150px"}}
+    <div
+      className={`nav`}
+      style={{ display: "flex", justifyContent: "flex-end", ...extrastyle}}
+    >
+      <img
+        style={{ width: "150px" }}
         className="nav_logo"
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1920px-Netflix_2015_logo.svg.png"
         alt="Netflix logo"
       />
-      {user?(
-        <Button color="link" style={{color:"black",fontSize:"25px"}} className="ButtonStyle" onClick={handleLogout}>
+      {(user||admin)
+       ? (
+        <Button
+          color="link"
+          style={{ color: "white", fontSize: "25px" }}
+          className="ButtonStyle"
+          onClick={handleLogout}
+        >
           Sign Out
         </Button>
       ) : null}
@@ -32,7 +56,7 @@ const NavBar = ({ logoutUser, history }) => {
 };
 // const mapStateToProps = (state) => {
 //   return {
-//     user: state.userState.user,
+//     admin: state.adminState.admin,
 //   };
 // };
-export default connect(null, { logoutUser })(withRouter(NavBar));
+export default connect(null, { logoutUser ,logoutAdmin})(withRouter(NavBar));

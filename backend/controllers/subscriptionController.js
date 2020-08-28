@@ -33,6 +33,7 @@ module.exports = {
             let paymentobj = {
               user_id: user._id,
               order_id: val.id,
+              plan:type,
               razor_payment_id: null,
               razor_signature: null,
             };
@@ -69,11 +70,11 @@ module.exports = {
         console.log("paid",paid)
         if(paid){
         const subscription = await SubscribeSchema.create({
-          userId: user.id,
-          plan: type,
+          userId: paid.user_id,
+          plan: paid.plan,
           planStartDate: Date(Date.now()).toString(),
           planExpiryDate:
-            type === "Monthly"
+            paid.plan === "Monthly"
               ? new Date(Date.now() + 2592000000).toString()
               : new Date(Date.now() + 31536000000).toString(),
         });

@@ -7,13 +7,14 @@ import {
   FORGOT_PASSWORD,
   CHANGE_PASSWORD,
   CHANGE_PHONE_NUMBER,
-  CHANGE_EMAIL
+  CHANGE_EMAIL,
+  FACEBOOK_LOGIN,
 } from "../actionTypes";
 
 export const registerUser = (data1) => async (dispatch) => {
   try {
     const { data } = await Axios.post(
-      `http://localhost:5555/user/register`,
+      `https://powerful-temple-56540.herokuapp.com/user/register`,
       data1,
       {
         headers: {
@@ -22,7 +23,6 @@ export const registerUser = (data1) => async (dispatch) => {
       }
     );
     // if (data.error) throw Error("error happened")
-    console.log(data);
     dispatch({ type: REGISTER_USER, payload: data });
     return data;
   } catch (err) {
@@ -32,7 +32,7 @@ export const registerUser = (data1) => async (dispatch) => {
 export const loginUser = (data1) => async (dispatch) => {
   try {
     const { data } = await Axios.post(
-      `http://localhost:5555/user/login`,
+      `https://powerful-temple-56540.herokuapp.com/user/login`,
       data1,
       {
         headers: {
@@ -40,7 +40,6 @@ export const loginUser = (data1) => async (dispatch) => {
         },
       }
     );
-    console.log(typeof data, data);
     dispatch({ type: LOGIN_USER, payload: data });
     return data;
   } catch (err) {
@@ -49,17 +48,19 @@ export const loginUser = (data1) => async (dispatch) => {
   }
 };
 export const logoutUser = () => async (dispatch, getState) => {
-  try {    
+  try {
     const userJSON = localStorage.getItem("user");
     const user = JSON.parse(userJSON);
-    const token = user.token;
-    const { data } = await Axios.delete(`http://localhost:5555/user/logout`, {
-      headers: {
-        Accept: "application/json",
-        Authorization: token,
-      },
-    });
-    console.log(data);
+    const token = user.user.token;
+    const { data } = await Axios.delete(
+      `https://powerful-temple-56540.herokuapp.com/user/logout`,
+      {
+        headers: {
+          Accept: "application/json",
+          Authorization: token,
+        },
+      }
+    );
     dispatch({ type: LOGOUT_USER, payload: data });
   } catch (err) {
     alert("invalid credentials");
@@ -69,8 +70,9 @@ export const logoutUser = () => async (dispatch, getState) => {
 export const emailVerification = (token) => async (dispatch) => {
   try {
     console.log(token);
-    const data = await Axios(`http://localhost:5555/user/verify/$${token}`);
-    console.log(data);
+    const data = await Axios(
+      `https://powerful-temple-56540.herokuapp.com/user/verify/$${token}`
+    );
     dispatch({ type: EMAIL_VERIFICATION, payload: data });
   } catch (err) {
     console.log(err);
@@ -80,7 +82,7 @@ export const forgotPasswordLink = (data1) => async (dispatch) => {
   try {
     console.log(data1);
     const { data } = await Axios.post(
-      `http://localhost:5555/user/forgot_password`,
+      `https://powerful-temple-56540.herokuapp.com/user/forgot_password`,
       data1,
       {
         headers: {
@@ -95,11 +97,14 @@ export const forgotPasswordLink = (data1) => async (dispatch) => {
     // console.log(err)
   }
 };
-export const ChangeforgotPassword = (data1,token) => async (dispatch,getState) => {
+export const ChangeforgotPassword = (data1, token) => async (
+  dispatch,
+  getState
+) => {
   try {
-    console.log(data1,token);
+    console.log(data1, token);
     const { data } = await Axios.put(
-      `http://localhost:5555/user/forgot_password/${token}`,
+      `https://powerful-temple-56540.herokuapp.com/user/forgot_password/${token}`,
       data1,
       {
         headers: {
@@ -114,20 +119,23 @@ export const ChangeforgotPassword = (data1,token) => async (dispatch,getState) =
     // console.log(err)
   }
 };
-export const ChangePassword = (data1) => async (dispatch,getState) => {
+export const ChangePassword = (data1) => async (dispatch, getState) => {
   try {
-    const usertoken = getState().userState.user.token;
+    const userJSON = localStorage.getItem("user");
+
+    const user = JSON.parse(userJSON);
+    const token = user.user.token;
     const { data } = await Axios.put(
-      `http://localhost:5555/user/changePassword`,
+      `https://powerful-temple-56540.herokuapp.com/user/changePassword`,
       data1,
       {
         headers: {
           Accept: "application/json",
-          Authorization:usertoken
+          Authorization: token,
         },
       }
     );
-    console.log(data)
+    console.log(data);
     dispatch({ type: CHANGE_PASSWORD, payload: data });
     return data;
   } catch (err) {
@@ -135,20 +143,23 @@ export const ChangePassword = (data1) => async (dispatch,getState) => {
     // console.log(err)
   }
 };
-export const changePhoneNo = (data1) => async (dispatch,getState) => {
+export const changePhoneNo = (data1) => async (dispatch, getState) => {
   try {
-    const usertoken = getState().userState.user.token;
+    const userJSON = localStorage.getItem("user");
+
+    const user = JSON.parse(userJSON);
+    const token = user.user.token;
+
     const { data } = await Axios.put(
-      `http://localhost:5555/user/changePhoneNumber`,
+      `https://powerful-temple-56540.herokuapp.com/user/changePhoneNumber`,
       data1,
       {
         headers: {
           Accept: "application/json",
-          Authorization:usertoken
+          Authorization: token,
         },
       }
     );
-    console.log(data)
     dispatch({ type: CHANGE_PHONE_NUMBER, payload: data });
     return data;
   } catch (err) {
@@ -156,24 +167,46 @@ export const changePhoneNo = (data1) => async (dispatch,getState) => {
     // console.log(err)
   }
 };
-export const changeEmail = (data1) => async (dispatch,getState) => {
+export const changeEmail = (data1) => async (dispatch, getState) => {
   try {
-    const usertoken = getState().userState.user.token;
+    const userJSON = localStorage.getItem("user");
+
+    const user = JSON.parse(userJSON);
+    const token = user.user.token;
     const { data } = await Axios.put(
-      `http://localhost:5555/user/changeEmail`,
+      `https://powerful-temple-56540.herokuapp.com/user/changeEmail`,
       data1,
       {
         headers: {
           Accept: "application/json",
-          Authorization:usertoken
+          Authorization: token,
         },
       }
     );
-    console.log(data)
     dispatch({ type: CHANGE_EMAIL, payload: data });
     return data;
   } catch (err) {
     alert("invalid credentials");
     // console.log(err)
+  }
+};
+export const facebookLogin = () => async (dispatch) => {
+  try {
+
+    const { data } = await Axios(`http://localhost:5555/facebook`, {
+      headers: {
+        Accept:"application/json",
+        'Access-Control-Allow-Origin':"*",
+        'Access-Control-Allow-Credentials':true,
+        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
+        "Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept, Authorization"
+      }
+    });
+    console.log(data);
+    dispatch({ type: FACEBOOK_LOGIN, payload: data });
+    return data;
+  } catch (err) {
+    alert("invalid credentials");
+    console.log(err);
   }
 };

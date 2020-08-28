@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import "../styles/netflixNav.css";
 import { NavLink, Link, withRouter } from "react-router-dom";
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
   Dropdown,
   DropdownToggle,
   DropdownMenu,
@@ -13,10 +10,8 @@ import {
 import { connect } from "react-redux";
 import { logoutUser } from "../redux/actions/userActions";
 import { searchMovies } from "../redux/actions/movieAction";
-// import { NavItem, NavLink } from "reactstrap";
 const NetflixNav = ({ logoutUser, history, color, searchMovies }) => {
   const [show, handleShow] = useState();
-  const [search, setSearch] = useState();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   const handleLogout = async () => {
@@ -24,9 +19,10 @@ const NetflixNav = ({ logoutUser, history, color, searchMovies }) => {
     history.push("/user/login");
   };
   const handleSearchChange = async (e) => {
-    console.log(e.target.value);
-    const response = await searchMovies(e.target.value);
-    console.log(response);
+    e.persist()
+    setTimeout(() => {
+      history.push(`/search?name=${e.target.value}`)
+    }, 1000);
   };
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -40,29 +36,30 @@ const NetflixNav = ({ logoutUser, history, color, searchMovies }) => {
   }, []);
   return (
     <div className={`nav ${show && "nav_black"}`} style={{ background: color }}>
+      
       <img
         className="nav_logo"
         src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1920px-Netflix_2015_logo.svg.png"
         alt="Netflix logo"
       />
-      <div style={{ display: "flex", marginLeft: "130px" }}>
+      <div style={{ display: "flex", marginLeft: "170px" }}>
         <p>
           <NavLink className="navlinkStyle" to="/">
             Home
           </NavLink>
         </p>
-        {/* <p>
-          <NavLink className="navlinkStyle" to="/movies">
+        <p>
+          <NavLink className="navlinkStyle" to="/movies/language">
             Movies
           </NavLink>
-        </p> */}
+        </p>
         <p>
           <NavLink className="navlinkStyle" to="/mylist">
             My List
           </NavLink>
         </p>
         <p>
-          <NavLink className="navlinkStyle" to="/">
+          <NavLink className="navlinkStyle" to="/latest">
             Latest
           </NavLink>
         </p>
@@ -71,7 +68,6 @@ const NetflixNav = ({ logoutUser, history, color, searchMovies }) => {
         <input
           className="search-input"
           type="search"
-          value={search}
           style={{ paddingLeft: "30px",color:"white"}}
           onChange={handleSearchChange}
           placeholder="Enter Movie Name..."

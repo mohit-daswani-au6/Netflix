@@ -7,6 +7,7 @@ const {
   TOP_RATED_MOVIES,
   GET_MOVIES_BY_GENRE,
   NETFLIX_ORIGINALS,
+  LATEST_MOVIES,
 } = require("../actionTypes");
 
 const initialState = {
@@ -22,18 +23,18 @@ const MoviesReducer = (state = initialState, actions) => {
       } else {
         return { ...state, admin: payload };
       }
-      case GET_MOVIES_BY_GENRE:
-        if (payload.error) {
-          return { ...state, error: payload };
-        } else {
-          return { ...state, admin: payload };
-        }
-        case NETFLIX_ORIGINALS:
-          if (payload.error) {
-            return { ...state, error: payload };
-          } else {
-            return { ...state, admin: payload };
-          }
+    case GET_MOVIES_BY_GENRE:
+      if (payload.error) {
+        return { ...state, error: payload };
+      } else {
+        return { ...state, admin: payload };
+      }
+    case NETFLIX_ORIGINALS:
+      if (payload.error) {
+        return { ...state, error: payload };
+      } else {
+        return { ...state, admin: payload };
+      }
     case TRENDING_MOVIES:
       if (payload.error) {
         return { ...state, error: payload };
@@ -52,11 +53,15 @@ const MoviesReducer = (state = initialState, actions) => {
       } else {
         return { ...state, admin: payload };
       }
+    case SEARCH_MOVIES_BY_LANGUAGE:
+      if (payload.error) {
+        return { ...state, error: payload };
+      } else return { ...state, admin: payload };
     case SEARCH_MOVIES:
       if (payload.error) {
         return { ...state, error: payload };
       } else return { ...state, admin: payload };
-    case SEARCH_MOVIES_BY_LANGUAGE:
+    case LATEST_MOVIES:
       if (payload.error) {
         return { ...state, error: payload };
       } else return { ...state, admin: payload };

@@ -4,8 +4,7 @@ import * as Yup from "yup";
 import "../styles/changePassword.css"
 import { connect } from "react-redux";
 import { ChangePassword } from "../redux/actions/userActions";
-import { Link, withRouter, Redirect } from "react-router-dom";
-import NavBar from "../components/NavBar";
+import {  withRouter, Redirect } from "react-router-dom";
 import NetflixNav from "../components/NetflixNav";
 import { Button } from "reactstrap";
 import Footer from "../components/Footer";
@@ -37,9 +36,10 @@ class ChangePasswordPage extends Component {
       this.setState({ error: resp.error });
     } else if (resp.statusCode === 201) {
       this.setState({ success: true });
+      localStorage.setItem("user", JSON.stringify(resp));
       console.log(this.state.success);
       setTimeout(() => {
-        this.props.history.push("/user/login");
+        this.props.history.push("/yourAccount");
       }, 2000);
     }
     setTimeout(() => {
@@ -48,11 +48,12 @@ class ChangePasswordPage extends Component {
   };
 
   render() {
-    const extrastyle={
-      position: "absolute",
-      bottom: "0px",
+    const extrastyle = {
+      margin: "-60px 0px",
+      padding: "60px",
+      background: "whitesmoke",
       width: "100%",
-    }
+    };
     const userJSON = localStorage.getItem("user");
     const user = JSON.parse(userJSON);
     return (
@@ -74,28 +75,32 @@ class ChangePasswordPage extends Component {
           onSubmit={this.handleSubmit}
         >
           {({ errors, touched }) => (
-            <Form style={{ display: "flex", flexDirection: "column" }}>
-              <Field style={{background:"white",fontSize: "18px", padding: "10px"}} placeholder="Current password" name="oldpassword" type="password" />
+            <Form style={{width:"500px" , display: "flex", flexDirection: "column",color:"red" }}>
+              <Field style={{background:"white",fontSize: "18px",color:"black", padding: "10px"}} placeholder="Current password" name="oldpassword" type="password" />
               {errors.oldpassword && touched.oldpassword ? (
                 <p>{errors.oldpassword}</p>
               ) : <br/>}
               
-              <Field style={{background:"white",fontSize: "18px", padding: "10px"}} placeholder="New password (8-32 characters)" name="password" type="password" />
+              <Field style={{background:"white",fontSize: "18px",color:"black", padding: "10px"}} placeholder="New password (8-32 characters)" name="password" type="password" />
               {errors.password && touched.password ? (
                 <p>{errors.password}</p>
               ) : <br/>}
-              <Field style={{background:"white",fontSize: "18px", padding: "10px"}} placeholder="Confirm new password" name="cpassword" type="password" />
+              <Field style={{background:"white",fontSize: "18px",color:"black", padding: "10px"}} placeholder="Confirm new password" name="cpassword" type="password" />
               {errors.cpassword && touched.cpassword ? (
                 <p>{errors.cpassword}</p>
               ) : <br/>}
               <br />
               {this.state.error ? <p>{this.state.error}</p> : null}
 
-              <Button color="primary" type="submit">Save</Button>
-            </Form>
+              <div style={{display:"flex", justifyContent:"space-evenly"}}>
+                  <Button style={{width:"100px"}} size="lg" color="primary" type="submit">
+                    Save
+                  </Button>
+                  <Button style={{width:"100px"}} size="lg" onClick={() => this.props.history.goBack()}>back</Button>
+                </div>            </Form>
           )}
         </Formik>
-        {this.state.success ? <h1>password successfully changed Redirecting to login</h1> : null}
+        {this.state.success ? <h5>Password changed successfully...</h5> : null}
         </div>}
         <Footer
           extrastyle={extrastyle}

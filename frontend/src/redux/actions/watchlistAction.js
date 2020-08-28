@@ -7,13 +7,12 @@ export const getWatchlist = () => async (dispatch, getState) => {
     const userJSON = localStorage.getItem("user");
     const user = JSON.parse(userJSON);
     const token = user.token;
-    const { data } = await Axios(`http://localhost:5555/user/watchlist`, {
+    const { data } = await Axios(`https://powerful-temple-56540.herokuapp.com/user/watchlist`, {
       headers: {
         Accept: "application/json",
         Authorization: token,
       },
     });
-    console.log(data);
     dispatch({ type: GET_WATCHLIST, payload: data });
     return data;
   } catch (err) {
@@ -28,7 +27,7 @@ export const addToWatchlist = (movieId) => async (dispatch, getState) => {
     const user = JSON.parse(userJSON);
     const token = user.token;
     const { data } = await Axios(
-      `http://localhost:5555/watchlist/${movieId}`,
+      `https://powerful-temple-56540.herokuapp.com/watchlist/${movieId}`,
       {
         headers: {
           Accept: "application/json",
@@ -36,7 +35,6 @@ export const addToWatchlist = (movieId) => async (dispatch, getState) => {
         },
       }
     );
-    console.log(data);
     dispatch({ type: ADD_TO_WATCHLIST, payload: data });
     return data;
   } catch (err) {

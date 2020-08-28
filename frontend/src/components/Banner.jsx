@@ -16,6 +16,7 @@ history.push("")
     <header
       className="banner"
       style={{
+        
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundImage: `url("${imgurl}")`,
@@ -25,7 +26,7 @@ history.push("")
         <h1 className="banner_title">{movie?.MovieName || movie?.title}</h1>
         <div className="banner_buttons">
          <Link to={`movies/${movie._id} `}> <button className="banner_button" >Play</button></Link>
-          <button className="banner_button">My list</button>
+          <Link to="/mylist"><button className="banner_button">My list</button></Link>
           <div className="banner_description">
             {truncate(movie?.title, 150)}
           </div>

@@ -30,9 +30,20 @@ input{
     height:45px;
     font-size:18px;
     background: #4b4747;
+    color: white;
+}
+textarea{
+  font-size:18px;
+  background: #4b4747;
+  color: white;
+}
+.custom-select{
+    background: #4b4747;
+    color: white;
 }
 .pageLayout{
   height: 730px;
+  opacity: 0.68;
   background-image: url("https://bramptonist.com/wp-content/uploads/2018/06/netflix-image.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;  

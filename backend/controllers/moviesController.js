@@ -52,7 +52,7 @@ module.exports = {
           MovieName: { $regex: value, $options: "i" },
         });
         console.log(movie);
-        res.json({ statusCode: 201, movie: movie });
+        res.json({ statusCode: 201, movies: movie });
       } catch (err) {
         console.log(err);
         return res.json("Server Error");

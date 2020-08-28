@@ -4,8 +4,7 @@ import * as Yup from "yup";
 import "../styles/changePassword.css";
 import { connect } from "react-redux";
 import { changePhoneNo } from "../redux/actions/userActions";
-import { Link, withRouter, Redirect } from "react-router-dom";
-import NavBar from "../components/NavBar";
+import { withRouter, Redirect } from "react-router-dom";
 import NetflixNav from "../components/NetflixNav";
 import { Button } from "reactstrap";
 import Footer from "../components/Footer";
@@ -32,10 +31,11 @@ class ChangePhoneNoPage extends Component {
     if (resp.status === "failed") {
       this.setState({ error: resp.error });
     } else if (resp.statusCode === 201) {
+      localStorage.setItem("user", JSON.stringify(resp));
       this.setState({ success: true });
       console.log(this.state.success);
       setTimeout(() => {
-        this.props.history.push("/user/login");
+        this.props.history.push("/yourAccount");
       }, 2000);
     }
     setTimeout(() => {
@@ -45,8 +45,9 @@ class ChangePhoneNoPage extends Component {
 
   render() {
     const extrastyle = {
-      position: "absolute",
-      bottom: "0px",
+      margin: "0px",
+      padding: "60px",
+      background: "whitesmoke",
       width: "100%",
     };
     const userJSON = localStorage.getItem("user");
@@ -70,11 +71,12 @@ class ChangePhoneNoPage extends Component {
               onSubmit={this.handleSubmit}
             >
               {({ errors, touched }) => (
-                <Form style={{ display: "flex", flexDirection: "column" }}>
+                <Form style={{width:"500px", display: "flex", flexDirection: "column",color:"red" }}>
                   <Field
                     style={{
                       background: "white",
                       fontSize: "18px",
+                      color:"black",
                       padding: "10px",
                     }}
                     placeholder="Password"
@@ -90,6 +92,7 @@ class ChangePhoneNoPage extends Component {
                     style={{
                       background: "white",
                       fontSize: "18px",
+                      color:"black",
                       padding: "10px",
                     }}
                     placeholder="Phone number"
@@ -104,14 +107,17 @@ class ChangePhoneNoPage extends Component {
                   <br />
                   {this.state.error ? <p>{this.state.error}</p> : null}
 
-                  <Button color="primary" type="submit">
+                  <div style={{display:"flex", justifyContent:"space-evenly"}}>
+                  <Button style={{width:"100px"}} size="lg" color="primary" type="submit">
                     Save
                   </Button>
+                  <Button style={{width:"100px"}} size="lg" onClick={() => this.props.history.goBack()}>back</Button>
+                </div>
                 </Form>
               )}
             </Formik>
             {this.state.success ? (
-              <h1>Phone number successfully changed Redirecting to login</h1>
+              <h5>Phone number successfully changed...</h5>
             ) : null}
           </div>
         )}

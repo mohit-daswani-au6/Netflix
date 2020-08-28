@@ -29,5 +29,5 @@ router.post(
 );
 // router.patch("/admin/editProducts/:productId",patch.edit_product)
 // router.delete("/admin/deleteProduct/:productId",patch.delete_product)
-router.delete("/admin/logout/:adminToken", delete1.logout_admin);
+router.delete("/admin/logout", delete1.logout_admin);
 module.exports = router;
