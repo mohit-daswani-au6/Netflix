@@ -64,11 +64,11 @@ const NetflixNav = ({ logoutUser, history, color, searchMovies }) => {
           </NavLink>
         </p>
       </div>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex",justifyContent:"flex-end" }}>
         <input
           className="search-input"
           type="search"
-          style={{ paddingLeft: "30px",color:"white"}}
+          style={{color:"white"}}
           onChange={handleSearchChange}
           placeholder="Enter Movie Name..."
         />
@@ -90,13 +90,6 @@ const NetflixNav = ({ logoutUser, history, color, searchMovies }) => {
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-        {/* <input type="text" placeholder="Enter MovieName" />
-
-          <button onClick={handleSearchClick}>
-            {/* {searchBar ? ( */}
-
-        {/* ) : null} */}
-        {/* </button> */}
       </div>
     </div>
   );

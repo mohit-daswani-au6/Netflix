@@ -66,7 +66,7 @@ const ChangeEmailPage = ({ changeEmail, history }) => {
             {({ errors, touched }) => (
               <Form
                 style={{
-                  width: "500px",
+                  width: "350px",
                   display: "flex",
                   flexDirection: "column",
                   color: "red",

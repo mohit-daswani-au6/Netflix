@@ -2,6 +2,7 @@ const express = require("express")
 const app = express()
 const dotenv = require("dotenv")
 dotenv.config()
+const fetch=require("isomorphic-fetch")
 const cors=require('cors')
 const rateLimit = require("express-rate-limit");
 const apiLimiter = rateLimit({
@@ -13,7 +14,11 @@ app.use( apiLimiter);
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 app.use(
-    cors()
+    cors({
+      origin:"*",                     //"http://127.0.0.1:5500/addproduct.html",
+      allowedHeaders: ["Content-Type","Authorization"],
+      credentials: true
+  })
 );
 
 const userRoute = require('./Routes/userRoute')
@@ -25,38 +30,24 @@ app.use(userRoute)
 app.use(adminRoute)
 app.use(movieRoute)
 app.use(subscriptionRoute)
+ 
 
 
-app.post("/capture/:paymentId", (req, res) => {
-    try {
-      return request(
-       {
-       method: "POST",
-       url: `https://${config.RAZOR_PAY_KEY_ID}:${config.RAZOR_PAY_KEY_SECRET}@api.razorpay.com/v1/payments/${req.params.paymentId}/capture`,
-       form: {
-          amount: 10 * 100, // amount == Rs 10 // Same As Order amount
-          currency: "INR",
-        },
-      },
-     async function (err, response, body) {
-       if (err) {
-        return res.status(500).json({
-           message: "Something Went Wrong",
-         }); 
-       }
-        console.log("Status:", response.statusCode);
-        console.log("Headers:", JSON.stringify(response.headers));
-        console.log("Response:", body);
-        return res.status(200).json(body);
-      });
-    } catch (err) {
-        console.log(err)
-      return res.status(500).json({
-        message: "Something Went Wrong",
-     });
-    }
-  });
+const handleSend = (req, res) => {
+  const secret_key = process.env.SECRET_KEY_RECAPTCHA;
+  const token = req.body.token;
+  console.log(token)
+  console.log(secret_key)
+  const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secret_key}&response=${token}`;
+  fetch(url, {
+      method: 'post'
+  })
+      .then(response => response.json())
+      .then(google_response => res.json({ google_response }))
+      .catch(error => res.json({ error }));
+};
 
+app.post('/send', handleSend);
 dotenv.config()
 require("./db")
 module.exports = app

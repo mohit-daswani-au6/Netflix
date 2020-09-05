@@ -1,10 +1,5 @@
 const admins = require("../models/admin");
 const movieSchema = require("../models/movies");
-const FormData = require("form-data");
-const AWS = require("aws-sdk");
-const { getVideoDurationInSeconds } = require("get-video-duration");
-const fs = require("fs");
-const axios = require("axios");
 const AWSsignedUrl = require("../utils/awsFileUpload");
 
 module.exports = {

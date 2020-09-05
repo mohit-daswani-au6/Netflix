@@ -22,34 +22,46 @@ const MoviePlayerPage = ({ getMovieDetail, match }) => {
   }, [MovieId]);
 
   const history = useHistory();
+  const userJSON = localStorage.getItem("user");
+  const user = JSON.parse(userJSON);
   return (
     <>
-      {!error ? (
-        <div className="videopage">
-          {movie ? (
-            <video
-              style={{ outline: "none" }}
-              onContextMenu={(e) => {
-                e.preventDefault();
-                return false;
-              }}
-              controlsList="nodownload"
-              preload="auto"
-              tabIndex="-1"
-              className="video"
-              controls
-              autoPlay
-            >
-              <source src={`https://${movie.movie}`} type="video/mp4" />
-              <source src="movie.ogg" type="video/ogg" />
-            </video>
-          ) : null}
-          <button className="back_button" onClick={() => history.goBack()}>
-            x
-          </button>
-        </div>
+      {!user ? (
+        <Redirect to="/user/login" />
       ) : (
-        <Redirect to="/subscriptionPlans" />
+        <>
+          {!error ? (
+            <div className="videopage">
+              {movie ? (
+                <video
+                  style={{ outline: "none" }}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    return false;
+                  }}
+                  controlsList="nodownload"
+                  preload="auto"
+                  tabIndex="-1"
+                  className="video"
+                  controls
+                  autoPlay
+                >
+                  <source src={`https://${movie.movie}`} type="video/mp4" />
+                  <source src="movie.ogg" type="video/ogg" />
+                </video>
+              ) : null}
+              <button
+                style={{ outline: "transparent" }}
+                className="back_button"
+                onClick={() => history.goBack()}
+              >
+                x
+              </button>
+            </div>
+          ) : (
+            <Redirect to="/subscriptionPlans" />
+          )}
+        </>
       )}
     </>
   );

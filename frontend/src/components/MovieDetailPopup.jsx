@@ -49,6 +49,7 @@ const MovieDetailPopup = ({ movie, addToWatchlist }) => {
           }}
         >
           <button
+          
             style={{
               background: "transparent",
               fontSize: "35px",

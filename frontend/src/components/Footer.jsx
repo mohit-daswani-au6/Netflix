@@ -18,13 +18,13 @@ const Footer = ({ extrastyle }) => {
       <h2>Questions? Contact us.</h2>
       <br />
       <Row>
-        <Col xs="2">
+        <Col xs="3">
           <Link to="#" style={{ color: "gray" }}>Audio and Subtitles</Link>
         </Col>
-        <Col xs="2">
+        <Col xs="3">
           <Link to="#" style={{ color: "gray" }}>Help Center</Link>
         </Col>
-        <Col xs="2">
+        <Col xs="3">
           <Link to="#" style={{ color: "gray" }}>Gift Cards</Link>
         </Col>
         <Col xs="2">
@@ -33,14 +33,14 @@ const Footer = ({ extrastyle }) => {
       </Row>
       <br />
       <Row>
-        <Col xs="2">
+        <Col xs="3">
           <Link to="#" style={{ color: "gray" }}>Media Center</Link>
         </Col>
-        <Col xs="2">
+        <Col xs="3">
           <Link to="#" style={{ color: "gray" }}>Jobs</Link>
         </Col>
-        <Col xs="2">
-          <Link to="#" style={{ color: "gray" }}>Cookie Prefferences</Link>
+        <Col xs="3">
+          <Link to="#" style={{ color: "gray" }}>Cookie Preferences</Link>
         </Col>
         <Col xs="2">
           <Link to="#" style={{ color: "gray" }}>Terms of use</Link>
@@ -48,7 +48,7 @@ const Footer = ({ extrastyle }) => {
       </Row>
       <br />
       <Row>
-        <Col xs="2">
+        <Col xs="3">
           <Link to="#" style={{ color: "gray" }}>Privacy Statement</Link>
         </Col>
       </Row>

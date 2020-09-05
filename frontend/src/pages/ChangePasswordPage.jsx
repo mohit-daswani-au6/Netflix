@@ -75,7 +75,7 @@ class ChangePasswordPage extends Component {
           onSubmit={this.handleSubmit}
         >
           {({ errors, touched }) => (
-            <Form style={{width:"500px" , display: "flex", flexDirection: "column",color:"red" }}>
+            <Form style={{width:"350px" , display: "flex", flexDirection: "column",color:"red" }}>
               <Field style={{background:"white",fontSize: "18px",color:"black", padding: "10px"}} placeholder="Current password" name="oldpassword" type="password" />
               {errors.oldpassword && touched.oldpassword ? (
                 <p>{errors.oldpassword}</p>

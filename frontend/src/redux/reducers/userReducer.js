@@ -8,6 +8,8 @@ const {
   CHANGE_PHONE_NUMBER,
   CHANGE_EMAIL,
   FACEBOOK_LOGIN,
+  GOOGLE_RECAPTCHA,
+  GOOGLE_LOGIN,
 } = require("../actionTypes");
 
 const initialState = {
@@ -34,23 +36,37 @@ const userReducer = (state = initialState, actions) => {
       if (payload.error) {
         return { ...state, error: payload };
       } else return { ...state, user: payload };
-      case FACEBOOK_LOGIN:
+    case FACEBOOK_LOGIN:
+      if (payload.error) {
+        return { ...state, error: payload };
+      } else {
+        localStorage.setItem("user", JSON.stringify(payload));
+        return { ...state, user: payload };
+      }
+      case GOOGLE_LOGIN:
         if (payload.error) {
           return { ...state, error: payload };
-        } else return { ...state, user: payload };
+        } else {
+          localStorage.setItem("user", JSON.stringify(payload));
+          return { ...state, user: payload };
+        }
     case CHANGE_PASSWORD:
       if (payload.error) {
         return { ...state, error: payload };
       } else return { ...state, user: payload };
-      case CHANGE_PHONE_NUMBER:
-        if (payload.error) {
-          return { ...state, error: payload };
-        } else return { ...state, user: payload };
-        case CHANGE_EMAIL:
-          if (payload.error) {
-            return { ...state, error: payload };
-          } else return { ...state, user: payload };
+    case CHANGE_PHONE_NUMBER:
+      if (payload.error) {
+        return { ...state, error: payload };
+      } else return { ...state, user: payload };
+    case CHANGE_EMAIL:
+      if (payload.error) {
+        return { ...state, error: payload };
+      } else return { ...state, user: payload };
     case FORGOT_PASSWORD:
+      if (payload.error) {
+        return { ...state, error: payload };
+      } else return { ...state, user: payload };
+    case GOOGLE_RECAPTCHA:
       if (payload.error) {
         return { ...state, error: payload };
       } else return { ...state, user: payload };

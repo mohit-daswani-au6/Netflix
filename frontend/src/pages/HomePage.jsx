@@ -12,6 +12,7 @@ import Banner from "../components/Banner";
 import NetflixNav from "../components/NetflixNav";
 import { Redirect, withRouter } from "react-router-dom";
 import { Spinner } from "reactstrap";
+import Footer from "../components/Footer";
 
 class HomePage extends Component {
   state = {
@@ -39,7 +40,6 @@ class HomePage extends Component {
     const user = JSON.parse(userJSON);
     return (
       <>
-        <NetflixNav />
 
         {!user ? (
           <Redirect to="/user/login" />
@@ -47,14 +47,13 @@ class HomePage extends Component {
           <div
             className="homePage"
             style={{
-              backgroundColor: "#111",
+              backgroundColor: "rgb(0,0,0)",
             }}
           >
             <NetflixNav />
 
             {this.state.movies.length !== 0 ? (
               <>
-                <NetflixNav />
                 <Banner movies={this.state.movies} />
 
                 <br />
@@ -98,6 +97,7 @@ class HomePage extends Component {
                   genre="Drama"
                   moviesURL={this.props.getMoviesByGenre}
                 />
+                <Footer extrastyle={{color:"white"}}/>
               </>
             ) : (
               <div
@@ -113,7 +113,7 @@ class HomePage extends Component {
                   style={{
                     width: "200px",
                     position: "relative",
-                    top: "160px",
+                    top: "150px",
                     objectFit: "contain",
                   }}
                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1920px-Netflix_2015_logo.svg.png"

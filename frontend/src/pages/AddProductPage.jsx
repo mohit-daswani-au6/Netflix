@@ -26,6 +26,7 @@ class AddProductPage extends Component {
     Drama: false,
     Horror: false,
     Thriller: false,
+    status: "",
   };
   handleChange = async (e) => {
     if (e.target.type === "file") {
@@ -62,11 +63,17 @@ class AddProductPage extends Component {
     fd.append("rating", this.state.rating);
     fd.append("genre", await JSON.stringify(genre));
     console.log(fd, this.props.addMovie);
+
     const response = await this.props.addMovie(fd);
     console.log(response);
-    // setTimeout(() => {
-    //   this.props.history.push("/admin/addProduct");
-    // }, 5000);
+if(response){
+  if(response.statusCode===201){
+    this.setState({status:"uploaded"})
+    setTimeout(() => {
+      window.location.reload(false)
+    }, 1000);
+  }
+}
   };
 
   render() {
@@ -77,9 +84,11 @@ class AddProductPage extends Component {
     const admin = localStorage.getItem("admin");
     return (
       <>
+    {admin?
+    <>
         <NavBar extrastyle={style} />
 
-        {admin ? (
+        {this.state.status!=="uploaded" ? (
           <div style={{ margin: "60px", color: "white" }}>
             <h2>Name</h2>
             <input 
@@ -275,8 +284,9 @@ class AddProductPage extends Component {
               </div>
             </div>
             <input  type="submit" onClick={this.handleSubmit} value="submit" />
-          </div>
-        ) : (
+          </div>):<h1>uploaded...</h1>}
+</>
+        : (
           <Redirect to="/admin/login" />
         )}
       </>

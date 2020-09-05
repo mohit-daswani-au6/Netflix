@@ -71,7 +71,7 @@ class ChangePhoneNoPage extends Component {
               onSubmit={this.handleSubmit}
             >
               {({ errors, touched }) => (
-                <Form style={{width:"500px", display: "flex", flexDirection: "column",color:"red" }}>
+                <Form style={{width:"350px", display: "flex", flexDirection: "column",color:"red" }}>
                   <Field
                     style={{
                       background: "white",

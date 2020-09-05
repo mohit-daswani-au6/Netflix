@@ -6,84 +6,8 @@ const router = Router();
 const authentication = require("../middlewares/authentication");
 const { check } = require("express-validator");
 
-
-
-
-const passport=require('passport')
-const { Strategy: FacebookStrategy } = require("passport-facebook");
-router.use(passport.initialize())
-const CLIENT_HOME_PAGE_URL = "http://localhost:3000";
-passport.serializeUser((user,done)=>{
-    console.log(user)
-    done(null,user.id)
-})
-//facebook middleware
-passport.use(new FacebookStrategy({
-  clientID: process.env.FACEBOOK_APP_API,
-  clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: `http://localhost:3000/facebook/redirect`,
-  profileFields: ['id', 'displayName', 'photos', 'email']
-},
-(accessToken, refreshToken,response, profile,done)=>{
-  console.log("accesstoken",accessToken)
-  console.log("refresh",refreshToken)
-  console.log("profile",profile)
-  console.log(response)
-  //checking if user already exits or not
-  users.findOne({facebookid:profile.id}).then(currentuser=>{
-      if(currentuser){ 
-          done(null,currentuser)
-      }else{
-          let token = async ()=>{
-              SECRET_KEY = `${profile.displayName}-${new Date(users.createdAt).getTime()}`
-              const token1 = await sign({ id: profile.id }, SECRET_KEY, {
-                  expiresIn: "1d"
-              })
-              new users({
-                  name:profile.displayName,
-                  facebookid:profile.id,
-                  token:await token1,
-                  email:profile.id,
-                  password:'null',
-                  phoneNo:profile.id,
-                  resetToken:accessToken,
-                  verified_email:true,
-                  isthirdparty:true,
-              }).save().then((currentuser)=>{
-              done(null,currentuser)
-              })
-          }
-          token()
-      }
-  })
-}
-));
-
-router.get("/facebook",passport.authenticate("facebook"));
- //facebook redirect route
- router.get("/facebook/redirect",
- passport.authenticate("facebook",
- {
-   successRedirect:CLIENT_HOME_PAGE_URL,
-     failureRedirect: "http://localhost:3000/user/register"
-   }
-),
-(req,res)=>{
-  res.send({
-    user:req.user
-  })    
-});
-
-
-
-
-
-
-
-
-
-
-
+router.post("/facebook",post.facebookLogin );
+router.post("/google",post.googleLogin );
 
 //-------------------------------------------------------Get Request Route
 router.get("/user/verify/:token", get.verify_user_email);
@@ -134,19 +58,13 @@ router.put(
 router.put(
   "/user/changePhoneNumber",
   authentication,
-  [
-    check("newPhoneNo")
-      .isLength(10)
-      .withMessage("Invalid phone number"),
-  ],
+  [check("newPhoneNo").isLength(10).withMessage("Invalid phone number")],
   put.ChangePhoneNumber
 );
 router.put(
   "/user/changeEmail",
   authentication,
-  [
-    check("email").isEmail().withMessage("Invalid Email")
-  ],
+  [check("email").isEmail().withMessage("Invalid Email")],
   put.ChangeEmail
 );
 //-------------------------------------------------------Delete Request Route

@@ -1,6 +1,6 @@
 .row1 {
   color: white;
-  margin-left: 20px;
+  /* margin-left: 20px; */
   margin-bottom:30px;
 }
 .row_posters {
@@ -24,7 +24,7 @@
 }
 .container:hover .row_poster {
   transform: scale(1.25);
-  opacity: 0.2;
+  opacity: 0.3;
 }
 .container:hover .addToWatchlist {
   opacity: 1;
@@ -62,10 +62,10 @@
 }
 .addToWatchlist {
   position: relative;
-  left: 210px;
+  left: 150px;
   border: transparent;
   bottom: 50px;
-  background-color: white;
+  background-color: gray;
   background-image: url("https://icons-for-free.com/iconfiles/png/512/add+photo+instagram+upload+icon-1320184027593509107.png");
   background-size: 70px;
   background-position: -17px -18px;
@@ -75,15 +75,22 @@
   background-repeat: no-repeat;
   padding: 0px 15px 0px 15px;
   -webkit-transition: width 0.4s;
-  transition: 0.5s ease;
+  transition: 0.0001s ease;
   opacity: 0;
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   text-align: center;
 }
+.addToWatchlist:active {
+  background: gray;
+}
+
 .container:hover .removeMylist {
   opacity: 1;
-  background-color: red;
+  background-color: white;
+}
+.removeMylist:active {
+  background-color: gray;
 }
 .container:hover .title {
   opacity: 1;

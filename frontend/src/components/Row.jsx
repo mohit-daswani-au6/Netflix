@@ -11,7 +11,6 @@ import SwiperCore, { Navigation } from "swiper";
 import "swiper/swiper.scss";
 import "swiper/components/navigation/navigation.scss";
 SwiperCore.use(Navigation);
-console.log(document.body.clientWidth);
 const Row = ({
   title,
   moviesURL,
@@ -37,7 +36,7 @@ const Row = ({
     //   }else{
     //     setperView(4)
     //   }}
-    //   Perview(window.screen.width)
+    //   Perview(document.body.clientWidth)
     const fetchMovies = async () => {
       const response = await moviesURL(genre);
       if (response) {
@@ -52,12 +51,10 @@ const Row = ({
   const handlePopup = (e) => {
     e.preventDefault();
     const movie = JSON.parse(e.target.value);
-    console.log(e.target.value);
     setmovieDetail(movie);
   };
   const handleRemoveWatchlist = async (e) => {
     e.preventDefault();
-    console.log(e.target.value);
     const response = await addToWatchlist(e.target.value);
     if (response.statusCode === 201) {
       window.location.reload(false);
@@ -67,18 +64,17 @@ const Row = ({
     e.preventDefault();
     await addToWatchlist(e.target.value);
   };
-
-  console.log(Math.floor((window.screen.width/320)))
   return (
     <div className="row1" style={{ styling }}>
-      <h2 style={{ marginLeft: "20px" }}>{title}</h2>
+      <h2 style={{ margin: "20px 20px 0px" }}>{title}</h2>
       <div>
         <Swiper
           className="row_posters"
-          style={{ padding: "20px" }}
-          spaceBetween={50}
+          style={{ padding: "20px 0px" }}
+          spaceBetween={0}
           id="main"
-          slidesPerView={Math.floor((window.screen.width/320))}
+          slidesPerGroup={Math.floor((document.body.clientWidth/320))}
+          slidesPerView={Math.floor((document.body.clientWidth/320))}
           navigation
           scrollbar={{ draggable: true }}
 
@@ -89,7 +85,7 @@ const Row = ({
                 <div
                   key={movie._id}
                   className="container"
-                  style={{ margin: " 0px 20px 0px 20px" }}
+                  style={{ margin: "0px 7px" }}
                 >
                   <Link to={`movies/${movie._id} `}>
                     <img
@@ -103,17 +99,18 @@ const Row = ({
                     />
                   </Link>
                   <div style={{position:"absolute"}}>
-                  <div className="title" style={{ marginTop: "-80px" }}>
-                    <h4>{movie.MovieName}</h4>
-                    <h3 className="popup_title" style={{ fontSize: "10px" }}>
+                  <div className="title" style={{ marginTop: "-115px" }}>
+                    <h4 style={{width:"150px"}}>{movie.MovieName}</h4>
+                    <p className="popup_title" style={{ fontSize: "12px" }}>
                       {movie.isAdult ? "A" : "U/A"} {movie.runTime}min
-                    </h3>
-                    <h3 className="popup_title" style={{ fontSize: "10px" }}>
+                    </p>
+                    <p className="popup_title" style={{ fontSize: "12px",marginTop:"-10px" }}>
                       #{movie?.rating} in Imdb
-                    </h3>
+                    </p>
                   </div>
                   <hr />
                   <button
+                  style={{outline:"transparent"}}
                     className={`popup ${
                       Movies.length <= 3 && "shortrowDetail"
                     }`}
@@ -122,6 +119,8 @@ const Row = ({
                   />
                   {list ? (
                     <button
+                    style={{outline:"transparent"}}
+
                       className={`removeMylist ${
                         Movies.length <= 3 && "shortrow"
                       }`}
@@ -131,6 +130,8 @@ const Row = ({
                     />
                   ) : (
                     <button
+                    style={{outline:"transparent"}}
+
                       className={`addToWatchlist ${
                         Movies.length <= 3 && "shortrow"
                       }`}

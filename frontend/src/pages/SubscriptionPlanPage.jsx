@@ -46,6 +46,7 @@ class SubscriptionPlanPage extends Component {
       padding: " 0 100px",
       background: "#e5e5e5"
     }
+
     return (
       <div style={{background:"white"}}>
       {user?

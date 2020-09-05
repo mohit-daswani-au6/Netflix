@@ -2,13 +2,17 @@ import React, { Component } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import "../styles/registerPage.css";
+import GoogleLogin from "react-google-login";
 import { connect } from "react-redux";
 import Footer from "../components/Footer";
-import { loginUser, facebookLogin } from "../redux/actions/userActions";
+import {
+  loginUser,
+  facebookLogin,
+  googleLogin,
+} from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
-import ReCAPTCHA from "react-google-recaptcha";
 import NavBar from "../components/NavBar";
-// import FacebookLogin from 'react-facebook-login';
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { Button } from "reactstrap";
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -25,45 +29,65 @@ const loginSchema = Yup.object().shape({
 class LoginPage extends Component {
   state = {
     error: "",
+    thirdpartyError: "",
   };
-  // componentDidMount(){
-  //   const fetch=async()=>{
-  //  const resp=await this.props.facebookLogin()
-  //  console.log(resp)
-  // }
-  // fetch()}
+  responseGoogle = async (response) => {
+    console.log(response);
+    const resp = await this.props.googleLogin({
+      accessToken: response.accessToken,
+      profile: response.profileObj,
+    });
+    console.log(resp);
+    if (resp) {
+      if (resp.statusCode === 400) {
+        await this.setState({ thirdpartyError: resp.error });
+
+        setTimeout(() => {
+          this.setState({ thirdpartyError: "" });
+        }, 3000);
+      } else if (resp.statusCode === 201) {
+        this.props.history.push("/");
+      }
+    }
+  };
+
   handleSubmit = async (data) => {
     const { email, password } = data;
     const obj = { email, password };
 
     const resp = await this.props.loginUser(obj);
-    console.log(resp);
     if (resp.statusCode === 400) {
       console.log(resp.error);
+      await this.setState({ thirdpartyError: resp.error });
       setTimeout(() => {
         this.setState({ error: "" });
       }, 3000);
-      this.setState({ error: resp.error });
     } else if (resp.statusCode === 201) {
       this.props.history.push("/");
     }
   };
-   onChange(value) {
-    console.log("Captcha value:", value);
-  }
-  handleFacebookLogin = async () => {
-    const resp = await this.props.facebookLogin();
-    console.log(resp);
-    //  const res=await window.open("http://localhost:5555/facebook", "_self");
-    //  console.log(res)
-    // };
-    // responseFacebook = (response) => {
-    //   console.log(response);
+  responseFacebook = async (response) => {
+    if(response.status!=="unknown"){
+    const resp = await this.props.facebookLogin(response);
+    if (resp) {
+      if (resp.statusCode === 400) {
+        console.log(resp.error);
+        await this.setState({ thirdpartyError: resp.error });
+        setTimeout(() => {
+          this.setState({ thirdpartyError: "" });
+        }, 3000);
+      } else if (resp.statusCode === 201) {
+        this.props.history.push("/");
+      }
+    }}
+    else {
+      this.props.history.push("/user/login")
+    }
   };
   render() {
     const extrastyle = {
       background: "black",
-      margin: "0px",
+      margin: "75px 0px",
       padding: "0px 100px",
       width: "100%",
       color: "white",
@@ -112,39 +136,103 @@ class LoginPage extends Component {
                   <br />
                 )}
                 {this.state.error ? <p>{this.state.error}</p> : null}
-                <Button size="lg" color="danger" type="submit">
-                  Submit
+                <Button
+                  size="lg"
+                  color="danger"
+                  style={{ background: "red" }}
+                  type="submit"
+                >
+                  Sign In
                 </Button>
               </Form>
             )}
           </Formik>
           <Link
             to="/user/forgotPassword"
-            style={{ float: "right", fontSize: "13px", color: "#cacaca" }}
+            style={{
+              marginTop: "5px",
+              float: "right",
+              fontSize: "13px",
+              color: "#cacaca",
+            }}
           >
             forgot password?
           </Link>
-          {/* <button onClick={this.handleFacebookLogin}>facebook</button> */}
-          {/* <ReCAPTCHA sitekey="6Lec7MMZAAAAAEBHR4tuamupufXEuGpioBfjZU3-" onChange={this.onChange} />, */}
-          {/* <FacebookLogin
+          <br />
+          <br />
+          <br />
+          <FacebookLogin
             appId="908576282981444"
-            autoLoad={true}
+            // autoLoad={true}
             fields="name,email,picture"
             onClick={this.componentClicked}
             callback={this.responseFacebook}
-          /> */}
-          ,
+            render={(renderProps) => (
+              <button
+              className="thirdpartyLogin"  
+                style={{
+                  color: "#cacaca",
+                  background: "transparent",
+                  border: "transparent",
+                }}
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+              >
+                <img
+                  src="https://1000logos.net/wp-content/uploads/2016/11/facebook-symbol.jpg"
+                  alt="facebook"
+                  height="25px"
+                />
+                Login with Facebook
+              </button>
+            )}
+          />
           <br />
+          <GoogleLogin
+            clientId="749284168506-lc5t8hml4japl89fpmti3lfsu9mpm32u.apps.googleusercontent.com"
+            buttonText="Login"
+            render={(renderProps) => (
+              <button
+              className="thirdpartyLogin"
+                style={{
+                  color: "#cacaca",
+                  background: "transparent",
+                  border: "transparent",
+                }}
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+              >
+                <img
+                  style={{ marginLeft: "-5px" }}
+                  src="https://i1.wp.com/www.androidawareness.com/wp-content/uploads/2018/10/google-icon.png?fit=500%2C500"
+                  alt="google"
+                  height="40px"
+                />
+                Login with Google
+              </button>
+            )}
+            onSuccess={this.responseGoogle}
+            onFailure={this.responseGoogle}
+            cookiePolicy={"single_host_origin"}
+          />
+          <br />
+          {this.state.thirdpartyError ? (
+            <p style={{ color: "coral" }}>{this.state.thirdpartyError}</p>
+          ) : null}
+
           <br />
           <p style={{ color: "#cacaca" }}>
-            New to Netflix?
+            New to Netflix?{" "}
             <Link
               to="/user/register"
-              style={{ fontSize: "17px", color: "white" }}
+              style={{ fontSize: "16px", color: "white" }}
             >
-              {" "}
               Sign Up Now
             </Link>
+          </p>
+          <p style={{ color: "#cacaca", fontSize: "12px" }}>
+            This page is protected by Google reCAPTCHA to ensure you're not a
+            bot.{" "}
           </p>
         </div>
         <Footer extrastyle={extrastyle} />
@@ -152,4 +240,6 @@ class LoginPage extends Component {
     );
   }
 }
-export default connect(null, { loginUser, facebookLogin })(LoginPage);
+export default connect(null, { loginUser, facebookLogin, googleLogin })(
+  LoginPage
+);

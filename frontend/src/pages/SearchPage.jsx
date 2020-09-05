@@ -5,41 +5,51 @@ import { connect } from "react-redux";
 import "../styles/listPage.css";
 import NetflixNav from "../components/NetflixNav";
 import Footer from "../components/Footer";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { parse } from "qs";
-const SearchPage = ({ location, searchMovies,history }) => {
+const SearchPage = ({ location, searchMovies, history }) => {
   const [query, setquery] = useState();
   const q = parse(location.search, { ignoreQueryPrefix: true }).name;
   useEffect(() => {
-    if (q.length > 0) {
-      setquery(q);
-    } else {
-
-history.push("/")
+    if (q) {
+      if (q.length > 0) {
+        setquery(q);
+      } else {
+        history.push("/");
+      }
     }
   }, [q]);
   const extrastyle = {
     background: "black",
     padding: "0 100px",
-    color:"white",
-    width:"100%",
-    margin:"20px"
+    color: "white",
+    width: "100%",
+    margin: "20px",
   };
+  const userJSON = localStorage.getItem("user");
+  const user = JSON.parse(userJSON);
   return (
     <>
       <NetflixNav />
-
-      <div style={{ mariginTop: "50px" }}>
-        <div
-          className="listPage"
-          style={{
-            backgroundColor: "#111",
-            paddingTop: "50px",
-          }}
-        >
-          <Row title="Search results" moviesURL={searchMovies} genre={query} />
+      {!user ? (
+        <Redirect to="/user/login" />
+      ) : (
+        <div style={{ mariginTop: "50px" }}>
+          <div
+            className="listPage"
+            style={{
+              backgroundColor: "black",
+              paddingTop: "50px",
+            }}
+          >
+            <Row
+              title="Search results"
+              moviesURL={searchMovies}
+              genre={query}
+            />
+          </div>
         </div>
-      </div>
+      )}
       <Footer extrastyle={extrastyle} />
     </>
   );

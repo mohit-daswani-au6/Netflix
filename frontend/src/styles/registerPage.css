@@ -1,36 +1,18 @@
-.Card {
-  display: flex;
-  flex-direction: column;
-  width: 400px;
-  margin-top: 10px;
-  height: 400px;
-  justify-content: center;
-  background: beige;
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-  align-items: center;
-}
-.Card h4 {
-  position: relative;
-  right: 50px;
-}
 .boxstyle {
-  width: 350px;
+  width: 383px;
   margin: auto;
-  height: 500px;
-  padding: 40px;
   background: black;
   padding: 40px;
-  margin-bottom: 200px;
   position: relative;
-  top: 100px;
+  top: 60px;
 }
 input{
     height:45px;
     font-size:18px;
     background: #4b4747;
     color: white;
+    border:transparent;
+    border-radius: 5px;
 }
 textarea{
   font-size:18px;
@@ -43,7 +25,7 @@ textarea{
 }
 .pageLayout{
   height: 730px;
-  opacity: 0.68;
+  /* opacity: 0.8; */
   background-image: url("https://bramptonist.com/wp-content/uploads/2018/06/netflix-image.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;  
@@ -52,4 +34,7 @@ textarea{
 }
 .forgotPasswordPage{
 
+}
+.thirdpartyLogin:focus{
+  outline: transparent;
 }

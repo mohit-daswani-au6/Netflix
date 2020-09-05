@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { connect } from "react-redux";
-import { registerUser } from "../redux/actions/userActions";
+import { registerUser, googleRecaptcha } from "../redux/actions/userActions";
 import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
+import ReCAPTCHA from "react-google-recaptcha";
 import { Button } from "reactstrap";
 import Footer from "../components/Footer";
 const phoneRegExp = /^(\+\d{1,3}[- ]?)?\d{10}$/;
@@ -29,12 +30,23 @@ class RegisterPage extends Component {
   state = {
     emailVerificaionPage: false,
     name: "",
+    disableSubmitButton: true,
     error: {
       email: "",
       phoneNo: "",
     },
   };
-
+  onChange = async (value) => {
+    const response = await this.props.googleRecaptcha(value);
+    if (response) {
+      if (response.google_response.success === true) {
+        this.setState({ disableSubmitButton: false });
+      } else {
+        this.setState({ disableSubmitButton: true });
+      }
+    }
+    console.log(response);
+  };
   handleSubmit = async (data) => {
     const { email, password, name, phoneNo } = data;
     this.setState({ name: name });
@@ -55,7 +67,7 @@ class RegisterPage extends Component {
   render() {
     const extrastyle = {
       background: "black",
-      margin: "0px",
+      margin: "50px 0px",
       padding: "0px 100px",
       width: "100%",
       color: "white",
@@ -128,20 +140,31 @@ class RegisterPage extends Component {
                     placeholder="Phone number"
                     style={{ fontSize: "18px", padding: "10px" }}
                     name="phoneNo"
-                    type="number"
+                    type="integer"
                   />
                   {this.state.error.phoneNo ? (
                     <p>{this.state.error.phoneNo}</p>
                   ) : null}
-
                   {errors.phoneNo && touched.phoneNo ? (
                     <p>{errors.phoneNo}</p>
                   ) : (
                     <br />
                   )}
                   <br />
-                  <Button size="lg" color="danger" type="submit">
-                    Submit
+                  <ReCAPTCHA
+                    sitekey="6LfuVsQZAAAAALI9jf2zXxAVR7pOxSzs45NAEj_f"
+                    onChange={this.onChange}
+                  />
+                  
+                  <br />
+                  <Button
+                    disabled={this.state.disableSubmitButton}
+                    size="lg"
+                    color="danger"
+                    style={{background:"red"}} 
+                    type="submit"
+                  >
+                    Sign Up
                   </Button>
                 </Form>
               )}
@@ -182,4 +205,4 @@ class RegisterPage extends Component {
     );
   }
 }
-export default connect(null, { registerUser })(RegisterPage);
+export default connect(null, { registerUser, googleRecaptcha })(RegisterPage);

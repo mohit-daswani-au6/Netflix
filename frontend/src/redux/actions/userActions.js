@@ -9,6 +9,8 @@ import {
   CHANGE_PHONE_NUMBER,
   CHANGE_EMAIL,
   FACEBOOK_LOGIN,
+  GOOGLE_RECAPTCHA,
+  GOOGLE_LOGIN,
 } from "../actionTypes";
 
 export const registerUser = (data1) => async (dispatch) => {
@@ -190,16 +192,12 @@ export const changeEmail = (data1) => async (dispatch, getState) => {
     // console.log(err)
   }
 };
-export const facebookLogin = () => async (dispatch) => {
+export const facebookLogin = (data1) => async (dispatch) => {
   try {
-
-    const { data } = await Axios(`http://localhost:5555/facebook`, {
+    console.log(data1)
+    const { data } = await Axios.post(`https://powerful-temple-56540.herokuapp.com/facebook`,data1, {
       headers: {
         Accept:"application/json",
-        'Access-Control-Allow-Origin':"*",
-        'Access-Control-Allow-Credentials':true,
-        "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT",
-        "Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept, Authorization"
       }
     });
     console.log(data);
@@ -210,3 +208,35 @@ export const facebookLogin = () => async (dispatch) => {
     console.log(err);
   }
 };
+export const googleLogin = (data1) => async (dispatch) => {
+  try {
+    const { data } = await Axios.post(`http://localhost:5555/google`,data1, {
+      headers: {
+        Accept:"application/json",
+      }
+    });
+    console.log(data);
+    dispatch({ type: GOOGLE_LOGIN, payload: data });
+    return data;
+  } catch (err) {
+    alert("invalid credentials");
+    console.log(err);
+  }
+};
+export const googleRecaptcha = (token) => async (dispatch) => {
+  try {
+    console.log(token)
+    const { data } = await Axios.post(`https://powerful-temple-56540.herokuapp.com/send`,{token}, {
+      headers: {
+        Accept:"application/json",
+      }
+    });
+    console.log(data);
+    dispatch({ type: GOOGLE_RECAPTCHA, payload: data });
+    return data;
+  } catch (err) {
+    alert("invalid credentials");
+    console.log(err);
+  }
+};
+

@@ -22,6 +22,7 @@ history.push("")
         backgroundImage: `url("${imgurl}")`,
       }}
     >
+            <div className="banner_fadetop"/>
       <div className="banner_content">
         <h1 className="banner_title">{movie?.MovieName || movie?.title}</h1>
         <div className="banner_buttons">

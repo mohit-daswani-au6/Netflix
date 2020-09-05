@@ -131,6 +131,90 @@ module.exports = {
         res.status(500).send("server error");
       }
     },
+    async facebookLogin(req, res) {
+      try {
+        const { id, name, email, accessToken } = req.body;
+        const currentuser = await users.find({ facebookid: id });
+        console.log(currentuser)
+        if (currentuser.length>0) {
+          let token = await currentuser[0].generateToken();
+          res.status(201).json({
+            statusCode: 201,
+            token,
+            user: currentuser[0],
+          });
+        } else {
+          const user = await users.create({
+            name,
+            facebookid: id,
+            email,
+            password: "null",
+            phoneNo: id,
+            resetToken: accessToken,
+            verified_email: true,
+            isthirdparty: true,
+          });
+          let token = await user.generateToken();
+          res.status(201).json({
+            statusCode: 201,
+            token: token,
+            user,
+          });
+        }
+      } catch (err) {
+        // console.log(err);
+        if (err.code === 11000) {
+          if (err.keyValue.hasOwnProperty("email")) {
+            return res.json({
+              statusCode: 400,
+              error: `Email already occupied for this account`,
+            });
+          }
+        }
+      }
+    },
+    async googleLogin(req, res) {
+      try {
+        const { profile, accessToken } = req.body;
+        const currentuser = await users.find({ googleid: profile.googleId });
+        if (currentuser.length>0) {
+          console.log(currentuser)
+          let token = await currentuser[0].generateToken();
+          res.status(201).json({
+            statusCode: 201,
+            token,
+            user: currentuser[0],
+          });
+        } else {
+          const user = await users.create({
+            name: profile.name,
+            googleid: profile.googleId,
+            email: profile.email,
+            password: "null",
+            phoneNo: profile.googleId,
+            resetToken: accessToken,
+            verified_email: true,
+            isthirdparty: true,
+          });
+          let token = await user.generateToken();
+          res.status(201).json({
+            statusCode: 201,
+            token: token,
+            user,
+          });
+        }
+      } catch (err) {
+        console.log(err);
+        if (err.code === 11000) {
+          if (err.keyValue.hasOwnProperty("email")) {
+            return res.json({
+              statusCode: 400,
+              error: `Email already occupied for this account`,
+            });
+          }
+        }
+      }
+    },
   },
 
   put: {
@@ -175,7 +259,7 @@ module.exports = {
         if (password === "Invalid Credentials") {
           res.json({ status: "failed", error: "Bad request" });
         } else {
-          console.log(newpassword,cpassword)
+          console.log(newpassword, cpassword);
           if (newpassword === cpassword) {
             const hashedpassword = await hash(newpassword, 10);
             const resetPassword = await users.findOneAndUpdate(
@@ -185,7 +269,7 @@ module.exports = {
             );
             res.status(200).json({
               statusCode: 201,
-              user:resetPassword
+              user: resetPassword,
             });
           } else {
             res.json({ status: "failed", error: "Password doesn't match" });
@@ -207,7 +291,10 @@ module.exports = {
       try {
         const user = req.user;
         const { password, email } = req.body;
-        const checkPassword = await users.findByPasswordToChangeEmailAndPhoneNo(user, password);
+        const checkPassword = await users.findByPasswordToChangeEmailAndPhoneNo(
+          user,
+          password
+        );
         if (checkPassword === "Invalid Credentials")
           return res.json({ status: "failed", error: "Bad request" });
         const resetEmail = await users.findOneAndUpdate(
@@ -217,7 +304,7 @@ module.exports = {
         );
         res.status(200).json({
           statusCode: 201,
-         user:resetEmail
+          user: resetEmail,
         });
       } catch (err) {
         console.log(err);
@@ -235,7 +322,10 @@ module.exports = {
       try {
         const user = req.user;
         const { password, newPhoneNo } = req.body;
-        const checkPassword = await users.findByPasswordToChangeEmailAndPhoneNo(user, password);
+        const checkPassword = await users.findByPasswordToChangeEmailAndPhoneNo(
+          user,
+          password
+        );
         if (checkPassword === "Invalid Credentials")
           return res.json({ status: "failed", error: "Bad request" });
         const resetPhoneNo = await users.findOneAndUpdate(
@@ -243,10 +333,10 @@ module.exports = {
           { phoneNo: newPhoneNo },
           { new: true }
         );
-        console.log(resetPhoneNo)
+        console.log(resetPhoneNo);
         res.status(200).json({
           statusCode: 201,
-          user:resetPhoneNo
+          user: resetPhoneNo,
         });
       } catch (err) {
         console.log(err);

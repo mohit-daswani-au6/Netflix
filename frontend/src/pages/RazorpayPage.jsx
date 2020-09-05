@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { razorpaySuccess } from "../redux/actions/subscriptionAction";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { Button, Container } from "reactstrap";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -24,7 +24,7 @@ const RazorpayPage = ({ razorpaySuccess, match, history }) => {
   const [Success, setSuccess] = useState(false);
   useEffect(() => {
     const data = async () => {
-       // eslint-disable-next-line 
+      // eslint-disable-next-line
       const { orderId } = match.params;
       setOrderId(orderId);
     };
@@ -51,7 +51,7 @@ const RazorpayPage = ({ razorpaySuccess, match, history }) => {
         if (res.statusCode === 200) {
           setSuccess(true);
           setTimeout(() => {
-            history.push("/")
+            history.push("/");
           }, 2000);
         }
       },
@@ -67,15 +67,15 @@ const RazorpayPage = ({ razorpaySuccess, match, history }) => {
     var paymentObj = new window.Razorpay(options);
     paymentObj.open();
   };
-  const extrastyle={
-    padding:"120px",
-    margin:"0px"
-  }
+  const extrastyle = {
+    padding: "120px",
+    margin: "0px",
+  };
   return (
-    <div style={{background:"white"}}>
+    <div style={{ background: "white" }}>
       <NavBar />
       <Container
-        style={{ paddingTop:"80px", textAlign: "center", width: "285px" }}
+        style={{ paddingTop: "80px", textAlign: "center", width: "285px" }}
       >
         {user ? (
           <>
@@ -106,7 +106,7 @@ const RazorpayPage = ({ razorpaySuccess, match, history }) => {
             <br />
           </>
         ) : (
-          <h1>Loading...</h1>
+          <Redirect to="/user/login" />
         )}
       </Container>
 

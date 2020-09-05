@@ -36,10 +36,11 @@ class ForgotPasswordPage extends Component {
   render() {
     const extrastyle = {
       background: "black",
-      margin: "0px",
       padding: "0px 100px",
       width: "100%",
       color: "white",
+      margin: "200px 0px",
+
     };
     return (
       <div className=" pageLayout">
